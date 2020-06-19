@@ -11,7 +11,7 @@
                 :visible.sync="mobileImg"
                 width="30%"
                 center>
-            <img class="mobile-Live" src="../qrcode.png"/>
+            <img class="mobile-Live" src="../src/assets/image/qrcode.png"/>
             <span slot="footer" class="dialog-footer">
             </span>
         </el-dialog>
@@ -52,7 +52,12 @@
           autoplay: true,
           width: '100%',
           height: 'auto',
+          // pausePosterEnabled: false,
           wording: {
+            1:'主播不在，先在直播间聊聊天吧~ ',
+            2:'主播不在，先在直播间聊聊天吧~ ',
+            4:'主播不在，先在直播间聊聊天吧~ ',
+            13:'您观看的直播已结束',
             2032: '请求视频失败，请检查网络',
             2048: '请求m3u8文件失败，可能是网络错误或者跨域问题'
           }
@@ -83,6 +88,13 @@
     mounted() {
       // 初始化监听器
       this.initListener()
+
+      // this.logout()
+      window.addEventListener( 'beforeunload', (e) => {
+          this.logout()
+        }
+      )
+
     },
 
     watch: {
@@ -121,12 +133,18 @@
         this.tweblive.on(this.TWebLive.EVENT.REMOTE_USER_LEAVE, this.onRemoteUserLeave)
         // 网络监测
         this.tweblive.on(this.TWebLive.EVENT.NET_STATE_CHANGE, this.onNetStateChange)
+        // 推流结束
+        this.tweblive.on(this.TWebLive.EVENT.ENDED, this.onLiveEnd)
       },
       onTextMessageReceived ({ data: messageList }) {
-        messageList.forEach(function(message) {
+        messageList.forEach((message)=> {
           const userName = message.nick || message.from
+          const avatar = message.avatar || this.userInfo.defaultImg
           message.nick = userName
+          message.avatar = avatar
+
         })
+
         this.$store.commit('pushCurrentMessageList', messageList)
       },
       onCustomMessageReceived () {
@@ -139,18 +157,21 @@
       onRemoteUserJoin ({ data: messageList }) {
         messageList.forEach(function(message) {
           const userName = message.nick || message.payload.userIDList[0]
-          message.payload.text = `${userName} 来了`
-          message.type = 'Live-tips'
+          message.payload.text = `欢迎 ${userName} 进入直播间 `
+          message.type = 'Live-Join'
         })
         if (this.isSDKReady) {
           this.$store.commit('pushCurrentMessageList', messageList)
         }
       },
+      onLiveEnd() {
+        this.$store.commit('showMessage', { type: 'warning', message: '直播已结束' })
+      },
       onRemoteUserLeave ({ data: messageList }) {
         messageList.forEach(function(message) {
           const userName = message.nick || message.payload.userIDList[0]
-          message.payload.text = `${userName} 走了`
-          message.type = 'Live-tips'
+          message.payload.text = `${userName} 离开了直播间`
+          message.type = 'Live-Leave'
         })
         this.$store.commit('pushCurrentMessageList', messageList)
       },
@@ -321,6 +342,7 @@
 
     //修改视频样式
     /deep/ .vcp-player video {
+        /*background-color #141520*/
         position absolute
         top 0
         left 0
@@ -334,8 +356,6 @@
     /deep/ .vcp-bigplay{
         display none
     }
-
-
 
     @media screen  and (max-width:1000px){
         .container-pc {

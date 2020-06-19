@@ -42,6 +42,10 @@
           width: '100%',
           height: '230',
           wording: {
+            1:'主播不在，先在直播间聊聊天吧~ ',
+            2:'主播不在，先在直播间聊聊天吧~ ',
+            4:'主播不在，先在直播间聊聊天吧~ ',
+            13:'您观看的直播已结束',
             2032: '请求视频失败，请检查网络',
             2048: '请求m3u8文件失败，可能是网络错误或者跨域问题'
           }
@@ -80,8 +84,12 @@
         }
 
       })
-      // n
-          this.initListener()
+
+      window.addEventListener('unload', () => {
+        this.logout()
+      })
+      this.initListener()
+
     },
 
     watch: {
@@ -129,6 +137,8 @@
         this.tweblive.on(this.TWebLive.EVENT.REMOTE_USER_LEAVE, this.onRemoteUserLeave)
         // 网络监测enterRoom
         this.tweblive.on(this.TWebLive.EVENT.NET_STATE_CHANGE, this.onNetStateChange)
+        // 推流结束
+        this.tweblive.on(this.TWebLive.EVENT.ENDED, this.onLiveEnd)
       },
       onTextMessageReceived ({ data: messageList }) {
         messageList.forEach(function(message) {
@@ -234,6 +244,9 @@
           await this._logout()
           this.enterRoom()
         }
+      },
+      onLiveEnd() {
+        this.$store.commit('showMessage', { type: 'warning', message: '直播已结束' })
       },
       onNetStateChange(event) {
         this.$store.commit('showMessage', this.checkoutNetState(event.data))

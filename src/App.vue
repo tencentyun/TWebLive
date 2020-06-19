@@ -19,7 +19,7 @@ export default {
     return {
       isMobile: isMobile()
     }
-  }
+  },
 }
 </script>
 

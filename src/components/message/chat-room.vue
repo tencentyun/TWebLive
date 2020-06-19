@@ -3,17 +3,24 @@
         <div class="live-title">
             <span v-for="(item,index) in tabs" :key="index" class="title-item" :class="{active:isActive[index]}" @click="tabClick(index)">{{item}}</span>
         </div>
-        <div id="message-send-box-wrapper"  v-if="!this.tabSelected">
+        <div id="message-send-box-wrapper"  v-show="this.tabSelected ===0">
             <liveLike />
             <div class="message-list" ref="message-list" @scroll="this.onScroll" >
-                <div class="message-box" v-for="message in currentMessageList" :key="message.ID" :message="message">
-                    <div class="message-item" v-if="message.type!=='Live-tips'">{{message.nick}}
+                <div class="message-box"  v-for="message in currentMessageList" :key="message.ID" :message="message">
+                    <img v-if="message.type!=='Live-Join' && message.type!=='Live-Leave'" class="message-img" :src="message.avatar">
+                    <div class="message-item" v-if="message.type!=='Live-Join' && message.type!=='Live-Leave'">
+                        <p class="message-nick">{{message.nick}}</p>
                         <template v-for="(item, index) in contentList(message)">
-                            <span :key="index" class="message-text" v-if="item.name === 'text'">: {{ item.text }}</span>
+                            <span :key="index" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
                             <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index"/>
                         </template>
                     </div>
-                    <div  class="message-item" v-if="message.type==='Live-tips'"
+                    <div  class="tip-text" v-if="message.type==='Live-Join'"
+                    >
+                        <img class="tips-img" src="../../assets/image/guzhang.png">
+                        <span>{{getGroupTipContent(message)}}</span>
+                    </div>
+                    <div  class="tip-leave" v-if="message.type==='Live-Leave'"
                     >
                         <span>{{getGroupTipContent(message)}}</span>
                     </div>
@@ -47,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-summary" v-else>
+        <div class="tab-summary" v-show="this.tabSelected ===1">
             <p class="summary-text">腾讯云 Web 直播互动组件，以腾讯云 Web 超级播放器 - TcPlayer 和腾讯云即时通信 IM - TIM 为基础，封装了简单易用的 API，提供了免费开源的 Demo，方便开发者快速接入和使用。适用于 Web 直播互动场景，如大型会议、活动、课程、讲座等的在线直播，带货直播的微信 H5 分享等。</p>
         </div>
     </div>
@@ -252,7 +259,7 @@
         /*position relative*/
         box-sizing border-box
         overflow hidden
-        padding: 3px 20px 20px 20px
+        /*padding: 3px 20px 20px 20px*/
     }
     .message-list {
           position absolute
@@ -265,7 +272,7 @@
           box-sizing border-box
           overflow-y scroll
           -webkit-overflow-scrolling touch //ios卡顿
-          padding 0 20px
+          padding 8px 20px
           margin-bottom 5px
       }
     .emojis {
@@ -311,19 +318,52 @@
    .message-box {
        font-family Microsoft YaHei,Arial,Helvetica,sans-serif,SimSun
        color #FFFFFF
-       .message-item, .tip-text {
+       display flex
+       .message-item {
            font-size 14px
-           padding 4px 5px
+           padding 4px 8px
            position relative
            line-height 18px
            word-wrap break-word
            white-space normal
-           color rgb(245, 166, 35)//#258ff3//#fea602
+           width 90%
+           .message-nick {
+               font-size 12px
+               line-height: 20px;
+               color rgba(254, 255, 254, 0.5)
+           }
+       }
+       .tip-text, .tip-leave {
+           font-size 14px
+           position relative
+           line-height 18px
+           word-wrap break-word
+           white-space normal
+           /*margin 0 auto*/
+           color rgb(245, 166, 35) //#258ff3//#fea602
+           .tips-img {
+               display inline-block
+               width 20px
+               vertical-align center
+           }
+
+       }
+       .tip-text {
+           padding 4px 35px
+       }
+       .tip-leave{
+           padding 4px 40px
        }
        .message-text{
            font-size 14px
            color #FFFFFF
        }
+   }
+   .message-img {
+       display inline-block
+       width 30px
+       height 30px
+       border-radius 50%
    }
     .emoji {
         height 40px
@@ -332,12 +372,15 @@
     }
 
     .send-header-bar {
-        width 90%
+        width 100%
         position absolute
         bottom 10px
         display flex
+        justify-content center
         box-sizing border-box
-        padding 3px 0 0 0
+        /*padding 3px 0 0 0*/
+        padding: 3px 20px 5px 20px
+
     }
     .send-header-bar span  {
         display flex
@@ -374,7 +417,7 @@
     }
      .send-btn{
          display flex
-         padding 2px 8px
+         padding 0 0 0 12px
      }
     .el-button--primary /deep/ {
         background-color rgb(245, 166, 35)

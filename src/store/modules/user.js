@@ -9,7 +9,7 @@ const user = {
     userInfo:{
       nickName:'' ,
       avatar:'',
-      defaultImg: 'https://madialab-storage-1256380422.cos.ap-guangzhou.myqcloud.com/img/vst_ico80x80_2x.png'
+      defaultImg: 'https://imgcache.qq.com/open/qcloud/video/act/webim-avatar/avatar-3.png'
     },
   },
   mutations: {

@@ -9,12 +9,14 @@ import './assets/icon/tim.css'
 import './assets/css/reset.css'
 import './assets/css/animate.css'
 import visibility from 'vue-visibility-change'
+import axios from 'axios'
 
 window.TWebLive = TWebLive
 window.store = store
 Vue.prototype.$bus = new Vue() // event Bus 用于无关系组件间的通信。
 Vue.prototype.TWebLive = TWebLive
 Vue.prototype.$store = store
+Vue.prototype.$axios = axios
 Vue.prototype.$confirm = MessageBox.confirm
 
 

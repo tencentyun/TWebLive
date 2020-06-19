@@ -6,7 +6,7 @@
                 <div class="message-box"  v-for="message in currentMessageList" :key="message.ID" :message="message">
                     <div class="message-item" v-if="message.type!=='Live-tips'">{{message.nick}}<span style="color:#ffffff"> ：</span>
                         <template v-for="(item, index) in contentList(message)">
-                            <span :key="index" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
+                            <span :key="item.ID" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
                             <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index"/>
                         </template>
                     </div>
@@ -16,7 +16,7 @@
                         enter-active-class="animated fadeInRightBig"
                         leave-active-class="animated fadeOut"
                 >
-                    <div v-if="showTip" class="live-tips">
+                    <div v-if="showTip" class="live-tips" :key="showTip.ID">
                         <img v-if="showTip.avatar" :src="showTip.avatar"   class="live-tips-img"/>
                         <span class="live-tips-text">{{getGroupTipContent(showTip)}}</span>
                     </div>
