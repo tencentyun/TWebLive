@@ -1,3 +1,4 @@
+import defaultImg from '../../assets/image/default.png'
 const user = {
   state: {
     currentUserProfile: {},
@@ -6,10 +7,11 @@ const user = {
     userID: 0,
     userSig: '',
     sdkAppID: 0,
+    errorImg: 'this.src="' + require('../../assets/image/default.png') + '"', //加载图片报错时处理方法
     userInfo:{
       nickName:'' ,
       avatar:'',
-      defaultImg: 'https://imgcache.qq.com/open/qcloud/video/act/webim-avatar/avatar-3.png'
+      defaultImg: defaultImg
     },
   },
   mutations: {

@@ -7,20 +7,25 @@
             <liveLike />
             <div class="message-list" ref="message-list" @scroll="this.onScroll" >
                 <div class="message-box"  v-for="message in currentMessageList" :key="message.ID" :message="message">
-                    <img v-if="message.type!=='Live-Join' && message.type!=='Live-Leave'" class="message-img" :src="message.avatar">
-                    <div class="message-item" v-if="message.type!=='Live-Join' && message.type!=='Live-Leave'">
+                    <img v-if="textMsg(message.type)" class="message-img" :src="message.avatar" @error="imgError(message)">
+                    <div class="message-item" v-if="textMsg(message.type)">
                         <p class="message-nick">{{message.nick}}</p>
-                        <template v-for="(item, index) in contentList(message)">
-                            <span :key="index" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
-                            <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index"/>
-                        </template>
+                        <div class="message-container">
+                            <div class="triangle"></div>
+                            <template v-for="(item, index) in contentList(message.payload.text)">
+                                <span :key="index" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
+                                <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index"/>
+                            </template>
+                            <MessageStatusIcon v-if="message.status==='fail'" :message="message"></MessageStatusIcon>
+                        </div>
+
                     </div>
-                    <div  class="tip-text" v-if="message.type==='Live-Join'"
+                    <div  class="tip-text" v-if="joinMsg(message.type)"
                     >
                         <img class="tips-img" src="../../assets/image/guzhang.png">
                         <span>{{getGroupTipContent(message)}}</span>
                     </div>
-                    <div  class="tip-leave" v-if="message.type==='Live-Leave'"
+                    <div  class="tip-leave" v-if="leaveMsg(message.type)"
                     >
                         <span>{{getGroupTipContent(message)}}</span>
                     </div>
@@ -44,11 +49,12 @@
                         v-model="messageContent"
                         @focus="focus = true"
                         @blur="focus = false"
-                        @keydown.enter.exact.prevent="handleEnter"
+                        @keyup.enter.native="handleEnter"
                         @keyup.ctrl.enter.prevent.exact="handleLine"
-                        @change="sendTextMessage"
                 >
             </el-input>
+<!--                @change="sendTextMessage"-->
+
                 <div class="send-btn">
                     <el-button type="primary" @click="sendTextMessage"  round>发送</el-button>
                 </div>
@@ -68,6 +74,7 @@
     Popover,
   } from 'element-ui'
   import liveLike from './liveLike/liveLike.vue'
+  import MessageStatusIcon from './message-status-icon.vue'
   import { emojiMap, emojiName, emojiUrl } from '../../utils/emojiMap'
   export default {
     name: 'newChat',
@@ -75,7 +82,8 @@
     components: {
       ElInput: Input,
       ElPopover: Popover,
-      liveLike: liveLike
+      liveLike: liveLike,
+      MessageStatusIcon
     },
     data() {
       return {
@@ -110,8 +118,9 @@
         userID: state => state.user.userID
       }),
       contentList() {
-        return (message) => {
-          return decodeText(message.payload)
+        // console.log(this.currentMessageList)
+        return (text) => {
+          return decodeText(text)
         }
 
       },
@@ -126,6 +135,9 @@
 
     },
     methods: {
+      imgError(item) {
+        item.avatar = require('../../assets/image/default.png')
+      },
       tabClick(index) {
         // window.scroll(0, 0)    //切换tab，聊天区域滑到底部
         this.isActive = ['','']
@@ -165,7 +177,19 @@
         this.messageContent += '\n'
       },
       handleEnter() {
-        this.sendTextMessage()
+         this.sendTextMessage()
+      },
+      // isMine(type) {
+      //   return type === 'isMine'
+      // },
+      leaveMsg(type) {
+         return type === 'Live-Leave'
+      },
+      textMsg(type) {
+        return type === 'TIMTextElem'
+      },
+      joinMsg(type) {
+        return type === 'Live-Join'
       },
       checkLogin () {
         this.messageContent = ''
@@ -191,17 +215,27 @@
             })
             return
           }
+          let message = {
+            payload:{
+              text:'',
+            }
+          }
+          message.nick = this.userInfo.nickName
+          message.avatar = this.userInfo.avatar
+          message.payload.text = this.messageContent
+          message.type = 'TIMTextElem'
+          message.status = 'unsend'
+          message.to = this.chatInfo.groupId
+          this.$store.commit('pushCurrentMessageList', message)
             this.tweblive.sendTextMessage({
               roomID: this.chatInfo.groupId,
               priority: this.TWebLive.TYPES.MSG_PRIORITY_NORMAL,
               text: this.messageContent
             })
-              .then((imResponse) => {
-                imResponse.data.message.nick = this.userInfo.nickName // 自己发送的没这个字段，需要补齐
-                imResponse.data.message.avatar = this.userInfo.avatar
-                this.$store.commit('pushCurrentMessageList', imResponse.data.message)
+              .then(() => {
               })
               .catch(error => {
+                message.status = 'fail'
                 if (error.code ===80001) {
                   error.message = '文本中可能包含敏感词汇'
                 }
@@ -327,11 +361,32 @@
            word-wrap break-word
            white-space normal
            width 90%
+           margin-left 6px
            .message-nick {
                font-size 12px
-               line-height: 20px;
+               line-height: 23px;
                color rgba(254, 255, 254, 0.5)
            }
+           .message-container{
+               display inline-block
+               position relative
+               background-color #32374d
+               border-radius 3px
+               border-top-left-radius:0
+               padding 8px 6px
+               .triangle{
+                   width:0;
+                   height:0;
+                   /*border-top:5px solid transparent;*/
+                   border-bottom:8px solid transparent;
+                   border-right:8px solid #32374d;
+                   position: absolute;
+                   left: -8px;
+                   top:0;
+               }
+
+           }
+
        }
        .tip-text, .tip-leave {
            font-size 14px
@@ -361,8 +416,9 @@
    }
    .message-img {
        display inline-block
-       width 30px
-       height 30px
+       min-width 40px
+       max-width 40px
+       height 40px
        border-radius 50%
    }
     .emoji {

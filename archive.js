@@ -41,15 +41,31 @@ archive.on('error', function(err) {
 archive.pipe(output);
 
 // append a file
+archive.file('vue.config.js', { name: 'vue.config.js' });
+
 archive.file('package.json', { name: 'package.json' });
 
+archive.file('postcss.config.js', { name: 'postcss.config.js' });
+
+archive.file('vue.config.js', { name: 'vue.config.js' });
+
+archive.file('.eslintignore', { name: '.eslintignore' });
+
+archive.file('.eslintrc', { name: '.eslintrc' });
+
+archive.file('.gitignore', { name: '.gitignore' });
+
 archive.file('archive.js', { name: 'archive.js' });
+
+archive.file('babel.config.js', { name: 'babel.config.js' });
 
 archive.file('check-tweblive-version.js', { name: 'check-tweblive-version.js' });
 
 archive.file('README.md', { name: 'README.md' });
 
-archive.file("腾讯云Web直播互动组件.md", { name: '腾讯云Web直播互动组件.md' });
+archive.file('腾讯云Web直播互动组件.md', { name: '腾讯云Web直播互动组件.md' });
+
+archive.file('CHANGELOG.md', { name: 'CHANGELOG.md' });
 
 // append files from a sub-directory, putting its contents at the root of archive
 archive.directory('sdk/', 'sdk');
@@ -57,6 +73,8 @@ archive.directory('sdk/', 'sdk');
 archive.directory('src/', 'src');
 
 archive.directory('dist/', 'dist');
+
+archive.directory('public/', 'public');
  
 // finalize the archive (ie we are done appending files but streams have to finish yet)
 // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
