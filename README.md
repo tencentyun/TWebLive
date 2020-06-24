@@ -4,8 +4,8 @@
 
 腾讯云 Web 直播互动组件，以腾讯云 Web 超级播放器 - [TcPlayer](https://cloud.tencent.com/document/product/454/7503) 和腾讯云即时通信 IM - [TIM](https://imsdk-1252463788.file.myqcloud.com/IM_DOC/Web/TIM.html) 为基础，封装了简单易用的 [API](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)，提供了免费开源的 [Demo](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/TWebLive-demo.zip)，方便开发者快速接入和使用。适用于 Web 直播互动场景，如大型会议、活动、课程、讲座等的在线直播，带货直播的微信 H5 分享等，效果如下：
 
-![](https://user-gold-cdn.xitu.io/2020/5/29/1725f98d5d6bdf32?w=350&h=622&f=png&s=156670)
-![](https://user-gold-cdn.xitu.io/2020/5/29/1725f98d5d8b58f8?w=350&h=622&f=png&s=95878)
+![](https://main.qcloudimg.com/raw/04f7ad86951354ba40f5d85cd204b5f5.jpg)
+![](https://main.qcloudimg.com/raw/2c46a40ce36c0faecc01ef12d317e803.png)
 
 ### 在线体验
 微信扫一扫二维码  ![](https://user-gold-cdn.xitu.io/2020/5/29/1725f98d5d57713f?w=260&h=260&f=png&s=6258)

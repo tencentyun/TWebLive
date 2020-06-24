@@ -52,7 +52,6 @@
           autoplay: true,
           width: '100%',
           height: 'auto',
-          // pausePosterEnabled: false,
           wording: {
             1:'主播不在，先在直播间聊聊天吧~ ',
             2:'主播不在，先在直播间聊聊天吧~ ',
@@ -90,7 +89,7 @@
       this.initListener()
 
       // this.logout()
-      window.addEventListener( 'beforeunload', (e) => {
+      window.addEventListener( 'beforeunload', () => {
           this.logout()
         }
       )
@@ -308,7 +307,7 @@
             .chat-container{
                 position relative
                 width 360px
-                background #141520
+                background #000//#141520
                 color #ffffff
                 margin-left 10px
                 border-radius 5px 5px 0 0
@@ -352,11 +351,17 @@
     /deep/ .vcp-player {
         width 100%
         height 100%
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     /deep/ .vcp-bigplay{
         display none
     }
-
+    /deep/ .vcp-error-tips {
+        color #FFFFFF
+    }
     @media screen  and (max-width:1000px){
         .container-pc {
             overflow-x auto

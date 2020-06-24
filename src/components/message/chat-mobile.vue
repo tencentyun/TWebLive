@@ -4,25 +4,31 @@
             <liveLike />
             <div class="message-list" ref="message-list"   @scroll="this.onScroll">
                 <div class="message-box"  v-for="message in currentMessageList" :key="message.ID" :message="message">
-                    <div class="message-item" v-if="message.type!=='Live-tips'">{{message.nick}}<span style="color:#ffffff"> ：</span>
-                        <template v-for="(item, index) in contentList(message)">
-                            <span :key="item.ID" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
-                            <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index"/>
-                        </template>
+                    <img v-if="message.type==='TIMTextElem'" class="message-img" :src="message.avatar" @error="imgError(message)">
+                    <div class="message-item" v-if="message.type==='TIMTextElem'">
+                        <p class="message-nick">{{message.nick}}</p>
+                        <div class="message-container">
+                            <div class="triangle"></div>
+                            <template v-for="(item, index) in contentList(message.payload.text)">
+                                <span :key="index" class="message-text" v-if="item.name === 'text'">{{ item.text }}</span>
+                                <img v-else-if="item.name === 'img'" :src="item.src" width="20px" height="20px" :key="index"/>
+                            </template>
+                            <MessageStatusIcon v-if="message.status==='fail'" :message="message"></MessageStatusIcon>
+                        </div>
                     </div>
                 </div>
-                <transition
-                        name="custom-classes-transition"
-                        enter-active-class="animated fadeInRightBig"
-                        leave-active-class="animated fadeOut"
-                >
-                    <div v-if="showTip" class="live-tips" :key="showTip.ID">
-                        <img v-if="showTip.avatar" :src="showTip.avatar"   class="live-tips-img"/>
-                        <span class="live-tips-text">{{getGroupTipContent(showTip)}}</span>
-                    </div>
-
-                </transition>
             </div>
+            <transition
+                    name="custom-classes-transition"
+                    enter-active-class="animated fadeInRightBig"
+                    leave-active-class="animated fadeOut"
+            >
+                <div v-if="showTip" class="live-tips" :key="showTip.ID">
+                    <img v-if="showTip.avatar" :src="showTip.avatar"   class="live-tips-img"/>
+                    <span class="live-tips-text">{{getGroupTipContent(showTip)}}</span>
+                </div>
+
+            </transition>
         </div>
         <div class="send-header-bar">
             <div class="send-header-box" v-if="!isSDKReady" @click="checkLogin"></div>
@@ -41,7 +47,7 @@
                     v-model="messageContent"
                     @focus="handleMobileInputFocus"
                     @blur="handleMobileInputBlur"
-                    @keydown.enter.exact.prevent="handleEnter"
+                    @keyup.enter.native="handleEnter"
                     @keyup.ctrl.enter.prevent.exact="handleLine"
             >
             </el-input>
@@ -60,6 +66,7 @@
     Popover,
   } from 'element-ui'
   import liveLike from './liveLike/liveLike.vue'
+  import MessageStatusIcon from './message-status-icon.vue'
   import { emojiMap, emojiName, emojiUrl } from '../../utils/emojiMap'
   export default {
     name: 'newChat',
@@ -67,7 +74,8 @@
     components: {
       ElInput: Input,
       ElPopover: Popover,
-      liveLike: liveLike
+      liveLike: liveLike,
+      MessageStatusIcon:MessageStatusIcon
     },
     data() {
       return {
@@ -106,8 +114,8 @@
         userID: state => state.user.userID
       }),
       contentList() {
-        return (message) => {
-          return decodeText(message.payload)
+        return (text) => {
+          return decodeText(text)
         }
 
       },
@@ -123,14 +131,6 @@
           return message.payload.text
         }
       },
-      // tips() {
-      //   this.currentMessageList.forEach((message) => {
-      //     if (message.type==='Live-tips') {
-      //       this.tips.push(message)
-      //
-      //     }
-      //   })
-      // }
     },
     updated() {
       this.keepMessageListOnButtom()
@@ -140,6 +140,9 @@
 
     },
     methods: {
+      imgError(item) {
+        item.avatar = require('../../assets/image/default.png')
+      },
       handleMobileInputFocus() {
         window.scroll(0, 400)
         this.focus = true
@@ -180,9 +183,8 @@
         this.messageContent += '\n'
       },
       handleEnter() {
-
+        this.sendTextMessage()
       },
-
       checkLogin () {
         this.messageContent = ''
         this.$store.commit('showMessage', {
@@ -193,8 +195,6 @@
       },
       sendTextMessage() {
         window.scroll(0, 0)    //ios键盘回落
-        // this.$nextTick(() => {
-        // })
         if (this.messageContent === '' || this.messageContent.trim().length === 0) {
           this.messageContent = ''
           this.$store.commit('showMessage', {
@@ -203,17 +203,26 @@
             })
           return
         }
+        let message = {
+          payload:{
+            text:''
+          }
+        }
+        message.nick = this.userInfo.nickName
+        message.avatar = this.userInfo.avatar
+        message.payload.text = this.messageContent
+        message.type = 'TIMTextElem'
+        message.status = 'unsend'
+        message.to = this.chatInfo.groupId
+        this.$store.commit('pushCurrentMessageList', message)
         this.tweblive.sendTextMessage({
               roomID: this.chatInfo.groupId,
               priority: this.TWebLive.TYPES.MSG_PRIORITY_NORMAL,
               text: this.messageContent
             })
-              .then((imResponse) => {
-                imResponse.data.message.nick = this.userInfo.nickName // 自己发送的没这个字段，需要补齐
-                imResponse.data.message.avatar = this.userInfo.avatar
-                this.$store.commit('pushCurrentMessageList', imResponse.data.message)
-              })
+              .then(() => {})
               .catch(error => {
+                message.status = 'fail'
                 //JSON.stringify(error, ['message', 'code'])
                 if (error.code ===80001) {
                   error.message = '文本中可能包含敏感词汇'
@@ -307,26 +316,82 @@
         box-sizing border-box
         overflow-y scroll
         -webkit-overflow-scrolling touch  //ios卡顿
-        padding: 0 20px
+        padding:5px 20px  //5px 20px 0px 40px
         margin-bottom 55px
     }
     .message-box {
-       font-family Microsoft YaHei,Arial,Helvetica,sans-serif,SimSun
-       color #FFFFFF
-       .message-item, .tip-text {
-           font-size 14px
-           padding 4px 5px
-           position relative
-           line-height 18px
-           word-wrap break-word
-           white-space normal
-           color rgb(245, 166, 35)//#258ff3//#fea602
-       }
-       .message-text{
-           font-size 14px
-           color #FFFFFF
-       }
-   }
+        font-family Microsoft YaHei,Arial,Helvetica,sans-serif,SimSun
+        color #FFFFFF
+        display flex
+        .message-item {
+            font-size 14px
+            padding 4px 8px
+            position relative
+            line-height 18px
+            word-wrap break-word
+            white-space normal
+            width 90%
+            margin-left 2px
+            .message-nick {
+                font-size 12px
+                line-height: 23px;
+                color #575ba6
+            }
+            .message-container{
+                display inline-block
+                position relative
+                background-color #32374d
+                border-radius 12px
+                /*border-top-left-radius:0*/
+                padding 8px 11px
+                .triangle{
+                    width:0;
+                    height:0;
+                    /*border-top:5px solid transparent;*/
+                    border-bottom:10px solid transparent;
+                    border-right:10px solid #32374d;
+                    border-bottom-right-radius:2px
+                    position: absolute;
+                    left: -8px;
+                    top:6px;
+                }
+
+            }
+
+        }
+        .tip-text, .tip-leave {
+            font-size 14px
+            position relative
+            line-height 18px
+            word-wrap break-word
+            white-space normal
+            /*margin 0 auto*/
+            color rgb(245, 166, 35) //#258ff3//#fea602
+            .tips-img {
+                display inline-block
+                width 20px
+                vertical-align center
+            }
+
+        }
+        .tip-text {
+            padding 4px 35px
+        }
+        .tip-leave{
+            padding 4px 40px
+        }
+        .message-text{
+            font-size 14px
+            color #FFFFFF
+        }
+    }
+    .message-img {
+        display inline-block
+        min-width 40px
+        max-width 40px
+        height 40px
+        border-radius 50%
+    }
     .emoji {
         height 40px
         width 40px

@@ -141,9 +141,11 @@
         this.tweblive.on(this.TWebLive.EVENT.ENDED, this.onLiveEnd)
       },
       onTextMessageReceived ({ data: messageList }) {
-        messageList.forEach(function(message) {
+        messageList.forEach((message)=> {
           const userName = message.nick || message.from
+          const avatar = message.avatar || this.userInfo.defaultImg
           message.nick = userName
+          message.avatar = avatar
         })
         this.$store.commit('pushCurrentMessageList', messageList)
       },
@@ -187,7 +189,7 @@
       getMyProfile() {
         this.tweblive.getMyProfile().then((res) => {
           this.userInfo.nickName = res.data.nick || this.userID
-          this.userInfo.avatar = res.data.avatar
+          this.userInfo.avatar = res.data.avatar || this.userInfo.defaultImg
         }).catch(()=>{
           // console.log('getMyProfile error:', imError)// 更新资料失败的相关信息
         })

@@ -1,3 +1,3 @@
-export const isDeve = () => {
+export const isDevelopment = () => {
   return process.env.NODE_ENV ==='development'
 }
