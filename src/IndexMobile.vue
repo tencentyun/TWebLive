@@ -23,6 +23,10 @@
   import Login from './components/user/login'
   import MTA from './utils/mta'
   import {isMobile} from './utils/mobile'
+  import { getUrlKey,IsValidFlv } from './utils/common'
+  import bg from './assets/image/video-bg.png'
+
+
   export default {
     title: 'TWebLive DEMO',
     components: {
@@ -41,6 +45,8 @@
           x5_type:'h5',
           width: '100%',
           height: '230',
+          poster: {style:'cover', src:bg},
+          pausePosterEnabled: false,
           wording: {
             1:'主播不在，先在直播间聊聊天吧~ ',
             2:'主播不在，先在直播间聊聊天吧~ ',
@@ -56,7 +62,19 @@
       }
 
     },
-
+    created() {
+      let url = window.location.href
+      let roomId  = getUrlKey('roomid',url)
+      if(roomId) {
+        this.$store.commit('setGroupId',roomId)
+      }
+      let flv = getUrlKey('flv',url)
+      if(flv && IsValidFlv(flv)) {
+        let m3u8 = flv.replace('flv','m3u8')
+        this.options.flv = flv
+        this.options.m3u8 = m3u8
+      }
+    },
     computed: {
       ...mapState({
         chatInfo: state => state.conversation.chatInfo,
@@ -149,9 +167,8 @@
         })
         this.$store.commit('pushCurrentMessageList', messageList)
       },
-      onCustomMessageReceived () {
-        this.$store.commit('showLike',1)
-
+      onCustomMessageReceived ({ data: messageList }) {
+        this.$store.commit('showLike',messageList.length)
       },
       onRemoteUserJoin ({ data: messageList }) {
         messageList.forEach(function(message) {
@@ -199,6 +216,10 @@
       enterRoom() {
         this.tweblive.enterRoom(this.chatInfo.groupId).then(() => {
           this.isJoined = true
+        }).catch((imError)=>{
+          if(imError.code === 10007) {
+            this.$store.commit('showMessage', { type: 'error', message: '加入的群组不存在'})
+          }
         })
       },
       exitRoom() {
@@ -327,6 +348,14 @@
     }
     /deep/ .vcp-bigplay{
         display none
+    }
+    /deep/ .vcp-error-tips {
+        color #FFFFFF
+        margin-top: -4.25em
+
+    }
+    /deep/ .vcp-panel-bg{
+        opacity 0.5
     }
     .text-ellipsis {
         overflow hidden

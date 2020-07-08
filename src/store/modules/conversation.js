@@ -14,6 +14,10 @@ const conversationModules = {
 
   },
   mutations: {
+
+    setGroupId(state, data) {
+      state.chatInfo.groupId = data
+    },
     showLike(state, data) {
       state.likeCount += data
     },

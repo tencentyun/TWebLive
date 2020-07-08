@@ -65,7 +65,7 @@
     Input,
     Popover,
   } from 'element-ui'
-  import liveLike from './liveLike/liveLike.vue'
+  import liveLike from './liveLike/liveLike1.vue'
   import MessageStatusIcon from './message-status-icon.vue'
   import { emojiMap, emojiName, emojiUrl } from '../../utils/emojiMap'
   export default {
