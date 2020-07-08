@@ -1,3 +1,14 @@
+#### 2020/7/7
+
+**Features**
+
+- TWebLive demo canvas实现点赞动画
+
+**Changes**
+
+- TWebLive demo 播放器添加默认背景图片
+- SDK 版本更新至 0.3.1
+
 #### 2020/6/19
 
 **Features**

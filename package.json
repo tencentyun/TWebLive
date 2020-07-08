@@ -18,8 +18,9 @@
     "md5": "^2.2.1",
     "postcss-plugin-px2rem": "^0.8.1",
     "postcss-px-to-viewport": "^1.1.1",
+
     "postcss-pxtorem": "^5.1.1",
-    "tweblive": "^0.3.0",
+    "tweblive": "^0.3.1",
     "vconsole": "^3.3.4",
     "vue": "^2.6.11",
     "vue-visibility-change": "^1.2.1",

@@ -34,3 +34,17 @@ export const errorMap = {
   620: '用户不存在',
   621: '密码错误'
 }
+
+export function getUrlKey(name) {
+  let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+  let r = window.location.search.substr(1).match(reg)
+  if (r != null) {
+    return unescape(r[2])
+  }
+  return null
+}
+
+export function IsValidFlv(url) {
+  let domian = url.replace(/^https?:\/\/(.*?)(:\d+)?\/.*$/,'$1').toString()
+  return domian === '3891.liveplay.myqcloud.com'
+}

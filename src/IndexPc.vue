@@ -37,6 +37,8 @@
   import Header from './components/header'
   import MTA from './utils/mta'
   import {isMobile} from './utils/mobile'
+  import { getUrlKey, IsValidFlv } from './utils/common'
+  import bg from './assets/image/video-bg.png'
   export default {
     title: 'TWebLive DEMO',
     components: {
@@ -52,6 +54,8 @@
           autoplay: true,
           width: '100%',
           height: 'auto',
+          poster: {style:'cover', src:bg},
+          pausePosterEnabled: false,
           wording: {
             1:'主播不在，先在直播间聊聊天吧~ ',
             2:'主播不在，先在直播间聊聊天吧~ ',
@@ -83,7 +87,18 @@
         return !this.isJoined
       }
     },
-
+    created() {
+      let roomId  = getUrlKey('roomid')
+      if(roomId) {
+        this.$store.commit('setGroupId',roomId)
+      }
+      let flv = getUrlKey('flv')
+      if(flv && IsValidFlv(flv)) {
+        let m3u8 = flv.replace('flv','m3u8')
+        this.options.flv = flv
+        this.options.m3u8 = m3u8
+      }
+    },
     mounted() {
       // 初始化监听器
       this.initListener()
@@ -146,9 +161,8 @@
 
         this.$store.commit('pushCurrentMessageList', messageList)
       },
-      onCustomMessageReceived () {
-        this.$store.commit('showLike',1)
-
+      onCustomMessageReceived ({ data: messageList }) {
+        this.$store.commit('showLike',messageList.length)
         // messageList.forEach(() => {
         //   this.$store.commit('showLike',1)
         // })
@@ -200,6 +214,10 @@
       enterRoom() {
         this.tweblive.enterRoom(this.chatInfo.groupId).then(() => {
           this.isJoined = true
+        }).catch((imError)=>{
+          if(imError.code === 10007) {
+            this.$store.commit('showMessage', { type: 'error', message: '加入的群组不存在'})
+          }
         })
       },
       exitRoom() {
@@ -361,6 +379,7 @@
     }
     /deep/ .vcp-error-tips {
         color #FFFFFF
+        margin-top: -8.25em
     }
     @media screen  and (max-width:1000px){
         .container-pc {
