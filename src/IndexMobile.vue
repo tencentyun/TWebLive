@@ -1,6 +1,7 @@
 <template>
     <div class="container-mobile">
-        <div id="video-container" class="video-box" ref="video"></div>
+        <div id="video-container" @click="showPanel" class="video-box" ref="video">
+        </div>
         <div class="live-title">
             <span v-for="(item,index) in tabs" :key="index" class="title-item" :class="{active:isActive[index]}" @click="tabClick(index)">{{item}}</span>
         </div>
@@ -8,9 +9,12 @@
           <login/>
         </div>
         <div ref="chat" class="chat">
-            <newChat v-show="!this.tabSelected" ref="live"/>
+            <NewChat v-show="!this.tabSelected" ref="live"/>
             <div class="tab-summary" v-show="this.tabSelected">
                 <p class="summary-text">腾讯云 Web 直播互动组件，以腾讯云 Web 超级播放器 - TcPlayer 和腾讯云即时通信 IM - TIM 为基础，封装了简单易用的 API，提供了免费开源的 Demo，方便开发者快速接入和使用。适用于 Web 直播互动场景，如大型会议、活动、课程、讲座等的在线直播，带货直播的微信 H5 分享等。</p>
+                <p class="summary-text">技术交流 QQ 群: 468195767</p>
+                <p class="summary-text">欢迎在github提issue哦~</p>
+                <p class="summary-text" style="font-size: 15px">github: https://github.com/tencentyun/TWebLive</p>
             </div>
         </div>
   </div>
@@ -19,11 +23,11 @@
 <script>
   import { mapState } from 'vuex'
   import Vue from 'vue'
-  import newChat from './components/message/chat-mobile'
+  import NewChat from './components/message/chat-mobile'
   import Login from './components/user/login'
   import MTA from './utils/mta'
   import {isMobile} from './utils/mobile'
-  import { getUrlKey,IsValidFlv } from './utils/common'
+  import { getUrlKey,isValidFlv } from './utils/common'
   import bg from './assets/image/video-bg.png'
 
 
@@ -31,11 +35,12 @@
     title: 'TWebLive DEMO',
     components: {
       Login,
-      newChat
+      NewChat
     },
     data() {
       return {
         isActive:[1,''],
+        showPlay:true,
         tabs:['互动','介绍'],
         tabSelected:0,  //互动
         options: {
@@ -69,7 +74,7 @@
         this.$store.commit('setGroupId',roomId)
       }
       let flv = getUrlKey('flv',url)
-      if(flv && IsValidFlv(flv)) {
+      if(flv && isValidFlv(flv)) {
         let m3u8 = flv.replace('flv','m3u8')
         this.options.flv = flv
         this.options.m3u8 = m3u8
@@ -216,9 +221,9 @@
       enterRoom() {
         this.tweblive.enterRoom(this.chatInfo.groupId).then(() => {
           this.isJoined = true
-        }).catch((imError)=>{
-          if(imError.code === 10007) {
-            this.$store.commit('showMessage', { type: 'error', message: '加入的群组不存在'})
+        }).catch((imError) => {
+          if(imError.code === 10007 || imError.code === 10015) {
+            this.$store.commit('showMessage', { type: 'error', message: '你加入的直播间不存在哦~'})
           }
         })
       },
@@ -239,6 +244,7 @@
             return ''
         }
       },
+
       checkoutNetState(state) {
         switch (state) {
           case this.TWebLive.TYPES.NET_STATE_CONNECTED:
@@ -273,6 +279,10 @@
       },
       onNetStateChange(event) {
         this.$store.commit('showMessage', this.checkoutNetState(event.data))
+      },
+      showPanel() {
+        let el = document.getElementsByClassName('vcp-controls-panel')[0]
+        el.setAttribute('class', 'vcp-controls-panel show') //设置元素class
       },
       onKickedOut(event) {
         this.$store.commit('showMessage', {

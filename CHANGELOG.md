@@ -1,3 +1,16 @@
+#### 2020/7/17
+
+**Features**
+
+- TWebLive demo 消息增加时间
+- TWebLive demo 增加二维码动态生成组件
+- TWebLive demo 引流，补充QQ技术交流群、github地址
+
+**Changes**
+
+- TWebLive demo 移动端播放器体验优化
+- SDK 版本更新至 0.3.2
+
 #### 2020/7/7
 
 **Features**

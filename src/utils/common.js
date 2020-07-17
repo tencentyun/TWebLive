@@ -44,7 +44,7 @@ export function getUrlKey(name) {
   return null
 }
 
-export function IsValidFlv(url) {
+export function isValidFlv(url) {
   let domian = url.replace(/^https?:\/\/(.*?)(:\d+)?\/.*$/,'$1').toString()
   return domian === '3891.liveplay.myqcloud.com'
 }
