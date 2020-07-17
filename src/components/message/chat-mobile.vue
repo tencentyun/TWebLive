@@ -6,7 +6,10 @@
                 <div class="message-box"  v-for="message in currentMessageList" :key="message.ID" :message="message">
                     <img v-if="message.type==='TIMTextElem'" class="message-img" :src="message.avatar" @error="imgError(message)">
                     <div class="message-item" v-if="message.type==='TIMTextElem'">
-                        <p class="message-nick">{{message.nick}}</p>
+                        <div style="display: flex">
+                            <p class="message-nick">{{message.nick}}</p>
+                            <span class="message-date">{{getDate(message)}}</span>
+                        </div>
                         <div class="message-container">
                             <div class="triangle"></div>
                             <template v-for="(item, index) in contentList(message.payload.text)">
@@ -60,6 +63,7 @@
 
 <script>
   import { decodeText } from '../../utils/decodeText'
+  import { getFullDate } from '../../utils/date'
   import { mapState } from 'vuex'
   import {
     Input,
@@ -129,6 +133,11 @@
       getGroupTipContent() {
         return (message) => {
           return message.payload.text
+        }
+      },
+      getDate() {
+        return (message) => {
+          return getFullDate(new Date(message.time * 1000))
         }
       },
     },
@@ -214,6 +223,7 @@
         message.type = 'TIMTextElem'
         message.status = 'unsend'
         message.to = this.chatInfo.groupId
+        message.time = Date.now() / 1000
         this.$store.commit('pushCurrentMessageList', message)
         this.tweblive.sendTextMessage({
               roomID: this.chatInfo.groupId,
@@ -332,10 +342,13 @@
             white-space normal
             width 90%
             margin-left 2px
-            .message-nick {
+            .message-nick, .message-date {
                 font-size 12px
-                line-height: 23px;
+                line-height: 23px
                 color #575ba6
+            }
+            .message-date {
+                margin-left 5px
             }
             .message-container{
                 display inline-block
@@ -383,6 +396,9 @@
         .message-text{
             font-size 14px
             color #FFFFFF
+            white-space normal
+            word-break break-all
+            word-wrap break-word
         }
     }
     .message-img {

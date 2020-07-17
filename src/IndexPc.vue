@@ -1,9 +1,10 @@
 <template>
     <div class="live-pc" >
         <Header  @logout="logout"/>
-        <div class="top-box" @click="showMobile">
-            <svg t="1591255158096" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2653" width="32" height="32"><path d="M754.9 64.4H269.1c-10.3 0-18.7 8.4-18.7 18.7v857.8c0 10.3 8.4 18.7 18.7 18.7h485.7c10.3 0 18.7-8.4 18.7-18.7V83.1c0.1-10.3-8.3-18.7-18.6-18.7z m-18.7 37.4v721.6H287.8V101.8h448.4zM475 875.9c0-19.3 15.7-35 35-35s35 15.7 35 35-15.7 35-35 35c-19.3 0.1-35-15.6-35-35z" fill="#ffffff" p-id="2654"></path></svg>
-            <span style="color: #ffffff">手机观看</span>
+        <div class="top-box">
+            <svg @click="showMobile" t="1591255158096" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2653" width="32" height="32"><path d="M754.9 64.4H269.1c-10.3 0-18.7 8.4-18.7 18.7v857.8c0 10.3 8.4 18.7 18.7 18.7h485.7c10.3 0 18.7-8.4 18.7-18.7V83.1c0.1-10.3-8.3-18.7-18.6-18.7z m-18.7 37.4v721.6H287.8V101.8h448.4zM475 875.9c0-19.3 15.7-35 35-35s35 15.7 35 35-15.7 35-35 35c-19.3 0.1-35-15.6-35-35z" fill="#ffffff" p-id="2654"></path></svg>
+            <span @click="showMobile"  style="color: #ffffff">手机观看</span>
+            <span style="color: #ffffff;margin-left: 10px">技术交流 QQ 群:468195767</span>
         </div>
 <!--        <div>时间</div>-->
         <el-dialog
@@ -11,9 +12,8 @@
                 :visible.sync="mobileImg"
                 width="30%"
                 center>
-            <img class="mobile-Live" src="../src/assets/image/qrcode.png"/>
-            <span slot="footer" class="dialog-footer">
-            </span>
+            <QRCode class="mobile-Live"/>
+<!--            <img class="mobile-Live" src="../src/assets/image/qrcode.png"/>-->
         </el-dialog>
         <div class="container-pc" >
             <div id="video-container" class="video-container"></div>
@@ -21,7 +21,7 @@
                 <login/>
             </div>
             <div class="chat-container">
-                <newChat />
+                <NewChat />
             </div>
         </div>
     </div>
@@ -32,19 +32,21 @@
 <script>
   import { mapState } from 'vuex'
   import Vue from 'vue'
-  import newChat from './components/message/chat-room'
+  import QRCode from './components/qrcode'
+  import NewChat from './components/message/chat-room'
   import Login from './components/user/login'
   import Header from './components/header'
   import MTA from './utils/mta'
   import {isMobile} from './utils/mobile'
-  import { getUrlKey, IsValidFlv } from './utils/common'
+  import { getUrlKey, isValidFlv } from './utils/common'
   import bg from './assets/image/video-bg.png'
   export default {
     title: 'TWebLive DEMO',
     components: {
       Login,
       Header,
-      newChat,
+      NewChat,
+      QRCode
     },
     data() {
       return {
@@ -93,7 +95,7 @@
         this.$store.commit('setGroupId',roomId)
       }
       let flv = getUrlKey('flv')
-      if(flv && IsValidFlv(flv)) {
+      if(flv && isValidFlv(flv)) {
         let m3u8 = flv.replace('flv','m3u8')
         this.options.flv = flv
         this.options.m3u8 = m3u8
@@ -215,8 +217,8 @@
         this.tweblive.enterRoom(this.chatInfo.groupId).then(() => {
           this.isJoined = true
         }).catch((imError)=>{
-          if(imError.code === 10007) {
-            this.$store.commit('showMessage', { type: 'error', message: '加入的群组不存在'})
+          if(imError.code === 10007 || imError.code === 10015) {
+            this.$store.commit('showMessage', { type: 'error', message: '你加入的直播间不存在哦~'})
           }
         })
       },
@@ -355,6 +357,9 @@
         margin 0 auto
         /*width 60px*/
         /*height 60px*/
+    }
+    /deep/ .el-dialog--center .el-dialog__body {
+        padding: 0px 25px 25px;
     }
 
     //修改视频样式

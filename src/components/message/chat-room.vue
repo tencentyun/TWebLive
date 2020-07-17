@@ -9,7 +9,10 @@
                 <div class="message-box"  v-for="message in currentMessageList" :key="message.ID" :message="message">
                     <img v-if="textMsg(message.type)" class="message-img" :src="message.avatar" @error="imgError(message)">
                     <div class="message-item" v-if="textMsg(message.type)">
-                        <p class="message-nick">{{message.nick}}</p>
+                        <div style="display: flex">
+                            <p class="message-nick">{{message.nick}}</p>
+                            <span class="message-date">{{getDate(message)}}</span>
+                        </div>
                         <div class="message-container">
                             <div class="triangle"></div>
                             <template v-for="(item, index) in contentList(message.payload.text)">
@@ -62,12 +65,15 @@
         </div>
         <div class="tab-summary" v-show="this.tabSelected ===1">
             <p class="summary-text">腾讯云 Web 直播互动组件，以腾讯云 Web 超级播放器 - TcPlayer 和腾讯云即时通信 IM - TIM 为基础，封装了简单易用的 API，提供了免费开源的 Demo，方便开发者快速接入和使用。适用于 Web 直播互动场景，如大型会议、活动、课程、讲座等的在线直播，带货直播的微信 H5 分享等。</p>
+            <p class="summary-text">欢迎在github提issue哦~</p>
+            <p class="summary-text" style="font-size: 15px">github: https://github.com/tencentyun/TWebLive</p>
         </div>
     </div>
 </template>
 
 <script>
   import { decodeText } from '../../utils/decodeText'
+  import { getFullDate } from '../../utils/date'
   import { mapState } from 'vuex'
   import {
     Input,
@@ -128,7 +134,12 @@
         return (message) => {
           return message.payload.text
         }
-      }
+      },
+      getDate() {
+        return (message) => {
+          return getFullDate(new Date(message.time * 1000))
+        }
+      },
     },
     updated() {
       this.keepMessageListOnButtom()
@@ -226,6 +237,7 @@
           message.type = 'TIMTextElem'
           message.status = 'unsend'
           message.to = this.chatInfo.groupId
+          message.time = Date.now() / 1000
           this.$store.commit('pushCurrentMessageList', message)
             this.tweblive.sendTextMessage({
               roomID: this.chatInfo.groupId,
@@ -362,10 +374,13 @@
            white-space normal
            width 90%
            margin-left 6px
-           .message-nick {
+           .message-nick, .message-date {
                font-size 12px
-               line-height: 23px;
+               line-height: 23px
                color rgba(254, 255, 254, 0.5)
+           }
+           .message-date {
+               margin-left 5px
            }
            .message-container{
                display inline-block
@@ -373,7 +388,7 @@
                background-color #32374d
                border-radius 3px
                border-top-left-radius:0
-               padding 8px 6px
+               padding 8px 8px
                .triangle{
                    width:0;
                    height:0;
@@ -412,6 +427,9 @@
        .message-text{
            font-size 14px
            color #FFFFFF
+           white-space normal
+           word-break break-all
+           word-wrap break-word
        }
    }
    .message-img {
