@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import conversation from './modules/conversation'
 import user from './modules/user'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 
 Vue.use(Vuex)
 
