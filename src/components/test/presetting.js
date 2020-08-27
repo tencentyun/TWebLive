@@ -2,12 +2,13 @@
 
 // preset before starting RTC
 import $ from 'jquery'
-
+// import { SDKAPPID } from '../public/debug/GenerateTestUserSig'
+const SDKAppID =  window.genTestUserSig('').SDKAppID
 class Presetting {
   constructor() {
     this.options = {
       fetchUrl: 'https://www.qcloudtrtc.com/sxb_dev/?svc=account&cmd=authPrivMap',
-      defaultSdkAppId: 1400188366, // unified sdkAppId for Demos on all platforms.
+      defaultSdkAppId: SDKAppID, // unified sdkAppId for Demos on all platforms.
       accountType: 14418
 
     }

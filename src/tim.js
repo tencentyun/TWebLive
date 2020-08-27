@@ -1,5 +1,4 @@
 import TWebLive from 'tweblive'
-import { SDKAPPID } from '../public/debug/GenerateTestUserSig'
 const SDKAppID =  window.genTestUserSig('').SDKAppID
 
 // 初始化 SDK 实例
