@@ -1,3 +1,16 @@
+#### 2020/8/27
+
+**Features**
+
+- TWebLive demo 新加一分钟推流组件
+- TWebLive demo 新增低延时播放组件
+- TWebLive demo 支持PC端和移动端
+
+**Changes**
+
+- TWebLive demo 移动端播放器体验优化
+- 全新SDK 版本更新 1.0.1 
+
 #### 2020/7/17
 
 **Features**

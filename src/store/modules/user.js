@@ -1,4 +1,5 @@
 import defaultImg from '../../assets/image/default.png'
+
 const user = {
   state: {
     currentUserProfile: {},
@@ -8,9 +9,9 @@ const user = {
     userSig: '',
     sdkAppID: 0,
     errorImg: 'this.src="' + require('../../assets/image/default.png') + '"', //加载图片报错时处理方法
-    userInfo:{
-      nickName:'' ,
-      avatar:'',
+    userInfo: {
+      nickName: '',
+      avatar: '',
       defaultImg: defaultImg
     },
   },

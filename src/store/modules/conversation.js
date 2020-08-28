@@ -1,22 +1,32 @@
+// import { SDKAPPID } from '../../../public/debug/GenerateTestUserSig'
+const SDKAPPID = window.genTestUserSig('').SDKAppID
 const conversationModules = {
   state: {
     currentMessageList: [],
     currentLiveTips: [],
     chatInfo: {
-      groupId: 'TWebLiveDeveloperHub',
+      groupId: '',
       userId: '',
       userSig: '',
-      sdkAppID: ''
+      sdkAppID: SDKAPPID,
+      streamId: '',
+      role: '',
+      resolution: ''
     },
-    likeCount:0     //点赞人数
+    likeCount: 0     //点赞人数
   },
-  getters: {
-
-  },
+  getters: {},
   mutations: {
-
-    setGroupId(state, data) {
-      state.chatInfo.groupId = data
+    setRole(state, data) {
+      state.chatInfo.role = data
+    },
+    setChatInfo(state, data) {
+      state.chatInfo.groupId = data.roomID
+      state.chatInfo.userId = data.userID
+      state.chatInfo.userSig = data.userSig
+      state.chatInfo.streamId = data.streamID
+      state.chatInfo.role = data.role
+      state.chatInfo.resolution = data.resolution
     },
     showLike(state, data) {
       state.likeCount += data
@@ -31,7 +41,7 @@ const conversationModules = {
     pushCurrentMessageList(state, data) {
       if (Array.isArray(data)) {
         state.currentMessageList = [...state.currentMessageList, ...data]
-      } else  {
+      } else {
         state.currentMessageList = [...state.currentMessageList, data]
       }
     },
@@ -39,13 +49,13 @@ const conversationModules = {
       let timer = null
       if (Array.isArray(data)) {
         state.currentLiveTips = [...state.currentLiveTips, ...data]
-      } else  {
+      } else {
         state.currentLiveTips = [...state.currentLiveTips, data]
       }
-      timer = setTimeout(()=>{
+      timer = setTimeout(() => {
         state.currentLiveTips.shift()
-      },2000)
-      if (state.currentLiveTips.length ===0) {
+      }, 2000)
+      if (state.currentLiveTips.length === 0) {
         clearTimeout(timer)
       }
     },
@@ -57,13 +67,11 @@ const conversationModules = {
     reset(state) {
       Object.assign(state, {
         currentMessageList: [],
-        currentLiveTips:[],
+        currentLiveTips: [],
       })
     }
   },
-  actions: {
-
-  }
+  actions: {}
 }
 
 export default conversationModules
