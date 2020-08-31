@@ -23,12 +23,26 @@ html {overflow-x: hidden;height: 100%;-webkit-tap-highlight-color: transparent;}
 body {font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;color: #333;line-height: 1;-webkit-text-size-adjust: none;}
 hr {height: .02rem;margin: .1rem 0;border: medium none;border-top: .02rem solid #cacaca;}
 a {color: #25a4bb;text-decoration: none;}
-/** { box-sizing: content-box;}*/
+
 
 @media screen and (max-width: 767px){
    .el-message {
-        min-width: 200px;
-        width: 80%;
+        top: 60px !important;
+        min-width: 0;
+        width: auto;
+        background: rgba(0,0,0,0.46);
+        border-color: rgba(0,0,0,0);
+        padding: 13px 13px 13px 18px
+    }
+    .el-message--success .el-message__content, .el-message .el-icon-success,
+    .el-message__icon .el-icon-error, .el-message__icon .el-icon-error ,.el-message .el-icon-error,
+    .el-message--error .el-message__content, .el-message--info .el-message__content, .el-message .el-icon-info
+    {
+        color: #ffffff;
+    }
+    .el-message-box {
+        width: 300px;
+        border-radius:0;
     }
 
 }

@@ -2,7 +2,7 @@
   <div class="container-mobile">
     <!--        <Login v-if="!isLogin" />-->
     <div class="container-mobile">
-      <img class="quit-btn" @click="logout" src="../assets/image/quit.png"/>
+      <img class="quit-btn" @click="open" src="../assets/image/quit.png"/>
       <div class="video-box">
         <Pusher></Pusher>
       </div>
@@ -74,6 +74,20 @@
       this.logout()
     },
     methods: {
+      open() {
+        this.$confirm('确认要退出登录吗？退出之后不能再参与直播互动!', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.logout()
+        }).catch(() => {
+          this.$store.commit('showMessage', {
+            message: '已取消退出',
+            type: 'info'
+          })
+        })
+      },
       exitRoom() {
         this.im.exitRoom(this.chatInfo.groupId).then(() => {
           this.isJoined = false
