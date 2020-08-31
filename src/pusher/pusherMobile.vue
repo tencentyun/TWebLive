@@ -48,29 +48,39 @@
           <p class="setting-icon cursor" v-if="isPush" @click="startPush">
             <img src="../assets/image/webrtc_push.png">
           </p>
-          <p class="setting-icon cursor" v-else @click="stopPush">
+          <p class="setting-icon cursor" v-else @click="openConfirm">
             <img src="../assets/image/webrtc_pusher_stop.png">
           </p>
         </div>
-        <!--                <div >-->
-        <!--                    <p class="setting-icon cursor" v-if="isPlay" @click="playHandler">-->
-        <!--                        <img src="../assets/image/unplay.png">-->
-        <!--                    </p>-->
-        <!--                    <p class="setting-icon cursor" v-else @click="playHandler">-->
-        <!--                        <img src="../assets/image/play.png">-->
-        <!--                    </p>-->
-        <!--                </div>-->
+        <div >
+            <p class="player-icon cursor" @click="playHandler">
+                <img style="width: 25px;padding: 5px"  src="../assets/image/qr-code.png">
+            </p>
+
+        </div>
       </div>
     </div>
+    <el-dialog
+            title="微信扫码观看"
+            :visible.sync="isShow_playUrl"
+            width="30%"
+            center>
+      <QRCode class="mobile-Live" :url="playUrl.cdnUrl"/>
+      <!--            <img class="mobile-Live" src="../src/assets/image/qrcode.png"/>-->
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
   import { mapState } from 'vuex'
+  import QRCode from '../components/qrcode'
   import Vue from 'vue'
   export default {
     name: 'pusher',
+    components:{
+      QRCode
+    },
     data() {
       return {
         pusherTime: '00:00:00',
@@ -127,6 +137,20 @@
     methods: {
       handleClose() {
         this.drawer = !this.drawer
+      },
+      openConfirm() {
+        this.$confirm('观众正在观看直播哦，确定关闭直播么?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.stopPush()
+        }).catch(() => {
+          this.$store.commit('showMessage', {
+            message: '已取消关闭',
+            type: 'info'
+          })
+        })
       },
       initListener() {
         const pusher = Vue.prototype.TWebLive.createPusher({
@@ -196,7 +220,6 @@
       },
       //推流
       startPush() {
-        console.log(this.chatInfo)
         let userID = this.chatInfo.userId
         let userSig = this.chatInfo.userSig
         let SDKAppID = this.chatInfo.sdkAppID
@@ -213,7 +236,6 @@
           console.log('demo pusher | startPush | ok')
           this.timeRecord()
           this.isPush = false
-          this.isShow_playUrl = true
           this.getLiveStreamURL()
         }).catch((error) => {
           this.$store.commit('showMessage', { type: 'error', message: '推流失败，请重试哦~' })
@@ -259,14 +281,13 @@
         this.playUrl.flv = url
         // +'&roomid='+this.chatInfo.groupId
         // https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive-demo-preview/index.html
-        this.playUrl.cdnUrl = '        https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/0.3.2/index.html?flv=' + url
-
-        console.log('demo pusher | getLiveStreamURL | ' + url, ' cdn 观看：https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive-preview/index.html?flv=' + url)
+        this.playUrl.cdnUrl = `https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/0.3.2-new-player/index.html?flv=${url}&roomid=${this.chatInfo.groupId}`
+        console.log('demo pusher | getLiveStreamURL | ' + url, ' cdn 观看：https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive-player/index.html?flv=' + url)
       },
       playHandler() {
-        this.isPlay = false
+        this.isShow_playUrl = true
         // window.location.href = this.playUrl.cdnUrl
-        window.open(this.playUrl.cdnUrl, '_blank')
+        // window.open(this.playUrl.cdnUrl, '_blank')
       },
 
       // 计时器
@@ -317,7 +338,13 @@
     justify-content center
     align-items center
   }
-
+  .player-icon {
+    width: 35px;
+    height: 35px;
+    margin-left 10px
+    border-radius: 50%;
+    background: #fff;
+  }
   .pusher-Mobile {
     position relative
     height 100%
@@ -477,7 +504,7 @@
         bottom 100px
         justify-content center
         transition: all .5s
-        z-index 9998
+        z-index 2000
         display inline-flex
         flex-direction column
 
@@ -513,7 +540,7 @@
 
   /deep/ .el-dialog--center {
     margin 0 !important
-    width 360px !important
+    width 340px !important
     padding 5px 0
   }
 

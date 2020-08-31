@@ -6,6 +6,7 @@
 
 <script>
   export default {
+    props:['url'],
     data() {
       return {
         final_img: ''
@@ -17,7 +18,7 @@
       }
     },
     created() {
-      let url = window.location.href
+      let url = this.url
       this.generateQR(url).then(res => {
         this.final_img = res
       })

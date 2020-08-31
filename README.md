@@ -1,169 +1,167 @@
-## 腾讯云 Web 直播互动组件
+## 简介
+[TWebLive](https://www.npmjs.com/package/tweblive)，腾讯云 Web 直播互动组件，是腾讯云终端研发团队推出的一个新的 SDK，集成了[腾讯云实时音视频 TRTC](https://cloud.tencent.com/product/trtc/)、[腾讯云即时通信 TIM](https://cloud.tencent.com/product/im)、[腾讯云超级播放器 TCPlayer](https://cloud.tencent.com/document/product/454/7503)，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 API，接入后可快速实现 Web 端推流、拉流以及实时聊天互动功能。
 
-### 简介
+## 效果展示
 
-腾讯云 Web 直播互动组件，以腾讯云 Web 超级播放器 - [TcPlayer](https://cloud.tencent.com/document/product/454/7503) 和腾讯云即时通信 IM - [TIM](https://imsdk-1252463788.file.myqcloud.com/IM_DOC/Web/TIM.html) 为基础，封装了简单易用的 [API](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)，提供了免费开源的 [Demo](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/TWebLive-demo.zip)，方便开发者快速接入和使用。适用于 Web 直播互动场景，如大型会议、活动、课程、讲座等的在线直播，带货直播的微信 H5 分享等，效果如下：
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/demo.gif)
 
-![](https://main.qcloudimg.com/raw/04f7ad86951354ba40f5d85cd204b5f5.jpg)
-![](https://main.qcloudimg.com/raw/2c46a40ce36c0faecc01ef12d317e803.png)
+## 运行体验
 
-### 在线体验
-微信扫一扫二维码  ![](https://user-gold-cdn.xitu.io/2020/5/29/1725f98d5d57713f?w=260&h=260&f=png&s=6258)
+- [在线 Demo](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/index.html)
+- [本地一分钟跑通体验](https://github.com/tencentyun/TWebLive)
 
-或者 [点我体验](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/index.html)
+## 架构和 API 设计
+其架构和 API 设计如下：
 
-### 开发背景
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/tweblive.png)
 
-前端开发同学经常遇到这样的需求：
-- 项目周期赶，甲方爸爸急着要，或者公司要做推广活动，只给了不到一周的时间（╮(╯▽╰)╭，业界常态）
-- 微信扫一扫、或者用手机浏览器扫一扫就能看直播，并且能跟其他看直播的人聊天互动，也能点赞、送礼（给我做一个虎牙或者斗鱼的那种直播效果出来！）
-- 在 Windows 或 Mac 浏览器上也需要上述的功能（小孩子才做选择，产品经理：我全都要！）
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/pusher.png)
 
-开发同学接到这样的需求，一般会怎么实现呢？对 Web 直播有一定了解的会选择 flv.js 或者 hls.js 来播放直播源。聊天互动用 websocket 快速写一个简单的消息收发 demo。然而写原型 demo 不难，但接下来会遇到到很多挑战：
-- 服务器该怎么布点才能让用户就近接入？遇到蜂拥请求，服务器扛不住并发压力怎么办？
-- 直播活动人数往往较多，全国各地的用户访问，消息通道建立不起来怎么办？
-- 短时间内自研一个 IM Server，如何保证服务高可用？
-- 消息量大，IM Server 推送消息遇到性能问题，导致消息堆积，或者丢消息怎么办？
-- 用户在直播间骂人，发表涉黄、涉政言论怎么办？
-- 如果用第三方 IM 服务，选择谁好呢？万一有坑，反馈问题没人理，导致项目延期怎么办？
-- 第三方 IM 服务往往有一大堆概念和 API，需要花时间熟悉和使用，留给开发业务逻辑的时间太仓促
-  
-由此可见，在短时间内如果自己从头开始组装开发，往往是加班加点，赶鸭子上架，开发同学身心俱疲，直播效果也不一定好。现在直播这么火热，***难道就没有一个开源的，组合了直播和聊天互动功能的项目，让我稍微改一改就能用起来么？***
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/player.png)
 
-腾讯云终端研发中心 Web 团队，开发了腾讯云 Web 超级播放器和即时通信 IM SDK（还有其它 SDK 暂且按下不表←_←），面对这样常见的需求和痛点，于是以这两个可靠优秀的产品为基础，开发了开源的腾讯云 Web 直播互动组件，供开发者使用和参考。
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/im.png)
 
-### 对开发者和项目有什么好处？
+## 对开发者有哪些好处？
+开发者接入此 SDK，可**彻底替代 flash 推流方案**，**大大降低** Web 推流、Web 低延时观看、CDN 观看以及实时聊天互动的**实现复杂度和时间成本**。
+1. 当需要推流时，创建 Pusher（推流）对象，最简单的推流仅需3步。
 
-##### 1、为开发者节省大量重复造轮子的时间，可专注于开发业务逻辑
-
-使用腾讯云 Web 直播互动组件，开发者仅需在下载好 [SDK](https://www.npmjs.com/package/tweblive) 后简单填入几个参数，即可快速把一个包含直播视频播放、聊天互动、点赞送礼等常见功能的项目跑起来。如下所示：
 ```javascript
-// npm i tweblive
-import TWebLive from 'TWebLive';
+<div id="pusherView" style="width:100%; height:auto;"></div>
+<script>
+// 1、创建 Pusher（推流）对象
+let pusher = TWebLive.createPusher({ userID: 'your userID' });
 
-let options = {
-  SDKAppID: 0, // 接入时需要将0替换为您的云通信应用的 SDKAppID
-  domID: "id_test_video", // 页面上播放器容器 ID，如 <div id="id_test_video" style="width:100%; height:auto;"></div>
-  // 必须同时同时填入 hls 和 flv 流地址
-  // 在支持 MSE 的浏览器上，直播组件会优先选择使用 flv 直播源，延时更低，直播效果更好
-  // 在不支持 MSE 的浏览器上，直播组件会使用 hls 直播源，延时稍大，但在移动端适应性好
-  m3u8: "http://200002949.vod.myqcloud.com/200002949_b6ffc.f0.m3u8", // 请替换成实际可用的播放地址
-  flv: "http://200002949.vod.myqcloud.com/200002949_b6ffc.f0.flv" // 请替换成实际可用的播放地址
-};
-// 创建实例
-let tweblive = new TWebLive(options);
-
-// SDK 进入 ready 状态时触发，接入侧监听此事件，然后可调用 SDK 发送消息等api，使用 SDK 的各项功能
-let onIMReady = function() {
-  tweblive.sendTextMessage({
-    roomID: 'TWebLiveDeveloperHub', // 替换为已加入的直播间 ID
-    text: 'hello from TWebLive'
-  }).then(function(res) {
-    console.log('demo sendTextMessage OK', res);
-  }).catch(function(err) {
-    console.log('demo sendTextMessage failed', err);
+// 2、设置渲染界面，且从麦克风采集音频，从摄像头采集视频（默认720p）
+pusher.setRenderView({
+  elementID: 'pusherView',
+  audio: true,
+  video: true
+}).then(() => {
+  // 3、填入 sdkappid roomid 等信息，推流
+  // url 必须以 `room://` 开头
+  let url = `room://sdkappid=${SDKAppID}&roomid=${roomID}&userid=${userID}&usersig=${userSig}&livedomainname=${liveDomainName}&streamid=${streamID}`;
+  pusher.startPush(url).then(() => {
+    console.log('pusher | startPush | ok');
   });
-}
-tweblive.on(TWebLive.EVENT.IM_READY, onIMReady);
+}).catch(error => {
+  console.error('pusher | setRenderView | failed', error);
+});
+</script>
+```
 
-// 收到直播间其他人发的文本消息
+2. 当需要拉流播放时，创建 Player（播放器）对象，最简单的拉流仅需3步。
+```javascript
+<div id="playerView" style="width:100%; height:auto;"></div>
+<script>
+// 1、创建 Player（播放器）对象
+let player = TWebLive.createPlayer();
+
+// 2、设置渲染界面
+player.setRenderView({ elementID: 'playerView' });
+
+// 3、填入 flv hls 地址等信息，拉 CDN 流播放，此时 url 必须以 `https://` 开头
+// 或 填入 sdkappid roomid 等信息，拉 WebRTC 低延时流播放，此时 url 必须以 `room://` 开头
+let url = 'https://'
+  + 'flv=https://200002949.vod.myqcloud.com/200002949_b6ffc.f0.flv' + '&' // 请替换成实际可用的播放地址
+  + 'hls=https://200002949.vod.myqcloud.com/200002949_b6ffc.f0.m3u8' // 请替换成实际可用的播放地址
+
+// let url = `room://sdkappid=${SDKAppID}&roomid=${roomID}&userid=${userID}&usersig=${userSig}`;
+player.startPlay(url).then(() => {
+  console.log('player | startPlay | ok');
+}).catch((error) => {
+  console.error('player | startPlay | failed', error);
+});
+</script>
+```
+
+3. 当需要跟其他人聊天互动时，创建 IM（即时通信）对象，最简单的消息收发仅需3步。
+```javascript
+// 1、创建 IM（即时通信）对象并监听事件
+let im = TWebLive.createIM({
+  SDKAppID: 0 // 接入时需要将0替换为您的云通信应用的 SDKAppID
+});
+// 监听 IM_READY IM_TEXT_MESSAGE_RECEIVED 等事件
+let onIMReady = function(event) {
+  im.sendTextMessage({ roomID: 'your roomID', text: 'hello from TWebLive' });
+};
 let onTextMessageReceived = function(event) {
   event.data.forEach(function(message) {
-    // 有昵称则用昵称，无昵称用 userID
-    console.log('demo ' + (message.nick || message.from) + ' 说: ', message.payload.text);
+    console.log((message.from || message.nick) + ' : ', message.payload.text);
   });
-}
-tweblive.on(TWebLive.EVENT.TEXT_MESSAGE_RECEIVED, onTextMessageReceived);
+};
+// 接入侧监听此事件，然后可调用 SDK 发送消息等
+im.on(TWebLive.EVENT.IM_READY, onIMReady);
+// 收到文本消息，上屏
+im.on(TWebLive.EVENT.IM_TEXT_MESSAGE_RECEIVED, onTextMessageReceived);
 
-// 收到直播间其他人发的送礼、点赞等自定义消息
-let onCustomMessageReceived = function(event) {
-  event.data.forEach(function(message) {
-    console.log('demo ' + 'data:' + message.payload.data + ' description:' + message.payload.description + ' extension:' + message.payload.extension);
-  });
-}
-tweblive.on(TWebLive.EVENT.CUSTOM_MESSAGE_RECEIVED, onCustomMessageReceived);
-
-// 收到其他人加入直播间的通知
-let onRemoteUserJoin = function(event) {
-  event.data.forEach(function(message) {
-    // 有昵称则用昵称，无昵称用 userID
-    console.log('demo ' + (message.nick || message.payload.userIDList[0]) + ' 来了');
-  });
-}
-tweblive.on(TWebLive.EVENT.REMOTE_USER_JOIN, onRemoteUserJoin);
-
-// 更多事件请参考：https://imsdk-1252463788.file.myqcloud.com/IM_DOC/Web/module-EVENT.html
-
-// 加入直播间，未登录时匿名加入直播间，只能收消息，不能发消息
-tweblive.enterRoom(""); // 接入时填要加入的直播间 ID，对应于 IM 系统的直播大群（AVChatRooM）的 groupID
-
-```
-
-##### 2、为开发者节省大量定位和解决问题的时间
-
-- 直播场景观众数量多，消息量大时，自研服务容易出现性能瓶颈，如服务器扛不住并发压力导致请求成功率低、消息堆积、丢消息、消息收发延时严重等难以排查和难以解决的问题。腾讯云 Web 直播互动组件的消息服务集成的是腾讯云即时通信 IM，以 QQ 多年的 IM 能力为基础，保证高并发、高可靠的即时通信能力，且有完善的统计和日志排障系统，遇到问题可快速定位解决。
-- 腾讯云 Web 直播互动组件支持设置消息优先级，如主播发言、观众送礼物等可设置为 [高优先级](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/module-TYPES.html#.MSG_PRIORITY_HIGH)，点赞等不重要的消息可设置为 [低优先级](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/module-TYPES.html#.MSG_PRIORITY_LOW)，IM 系统会保证高优先级消息的下发（直播间消息量超过40条/秒时 IM 后台会限频）。
-
-##### 3、为项目节省大量的开发和运维成本
-
-- 腾讯云 Web 直播互动组件是完全免费开源的，其集成的腾讯云 Web 超级播放器是免费的，仅腾讯云即时通信 IM 是增值服务。如果您的项目处于起步阶段，可以使用免费版的 IM 服务。项目发展好，用户量大时，可以购买 [IM 旗舰版](https://cloud.tencent.com/document/product/269/40267)，价格非常美丽，全行业最低。
-- 腾讯云即时通信 IM 的直播大群（AVChatRoom），群成员人数无上限（这个厉害了，让我叉会腰）。
-- 腾讯云 IM 服务器的节点覆盖面广，可保证用户就近接入，且不用担心服务器扩容问题。
-- 支持针对涉黄、涉政以及不雅词的安全打击，满足安全监管需求。
-- 腾讯云 IM 服务团队响应即时，为您的项目保驾护航。
-
-### 开发者需要做什么？
-
-##### 1、提供直播源，推荐用 [腾讯实时音视频 TRTC](https://cloud.tencent.com/document/product/647/16788) 的 [旁路推流](https://cloud.tencent.com/document/product/647/16826)
-
-为了同时兼容 PC 和移动端，开发者必须同时提供 flv 和 hls 两种格式的直播源，在支持 MSE 的浏览器上，直播组件会优先选择使用 flv 直播源，延时更低，直播效果更好；在不支持 MSE 的浏览器上，直播组件会使用 hls 直播源，延时稍大，但在移动端适应性好。
-
-如果在 Windows 或 Mac 平台推直播流，强烈建议使用 [TRTC Electron](https://github.com/tencentyun/TRTCSDK/tree/master/Electron)，***旁路推流可同时生成 flv 和 hls 流，跟腾讯云即时通信 IM 完美结合，稳定可靠，服务周到，价格美丽***。
-[跑通 Electron Demo](https://cloud.tencent.com/document/product/647/38548) 这篇文档会帮您快速实现直播和旁路推流，效果如下：
-![](https://user-gold-cdn.xitu.io/2020/5/29/1725f98d5d80e0b0?w=945&h=631&f=gif&s=7387017)
-
-##### 2、注册腾讯云即时通信 IM 应用
-
-- 在 [即时通信 IM 控制台](https://console.cloud.tencent.com/avc) 注册应用，获得 SDKAppID。
-- [生成 UserSig](https://cloud.tencent.com/document/product/269/32688)。
-- 用 [REST API](https://cloud.tencent.com/document/product/269/1519) 向 IM 系统 [导入账号](https://cloud.tencent.com/document/product/269/1608)。
-- 在 [即时通信 IM 控制台](https://console.cloud.tencent.com/avc) 或者用 REST API [创建直播大群（AVChatRoom）](https://cloud.tencent.com/document/product/269/1615)
-
-##### 3、在腾讯云 Web 直播互动组件的基础上，开发相关业务逻辑
-
-### 常见问题
-
-##### 1、进入直播间，其他人看到的提示信息和聊天消息都用的是 `userID`，能否支持用昵称（nick）展示？
-
-如果进直播间想要展示昵称，需要先设置昵称（已设置过可忽略此步骤），设置成功后再加入
-```javascript
-// 只有已登录的用户才能修改自己的昵称
-tweblive.setMyProfile({ nick: "胡八一" }).then(() => {
-  tweblive.enterRoom(""); // 填要加入的直播间 ID，对应于 IM 系统的直播大群（AVChatRooM）的 groupID
+// 2、登录
+im.login({userID: 'your userID', userSig: 'your userSig'}).then((imResponse) => {
+  console.log(imResponse.data); // 登录成功
+  if (imResponse.data.repeatLogin === true) {
+    // 标识账号已登录，本次登录操作为重复登录
+    console.log(imResponse.data.errorInfo);
+  }
+}).catch((imError) => {
+  console.warn('im | login | failed', imError); // 登录失败的相关信息
 });
+
+// 3、加入直播间
+im.enterRoom('your roomID').then((imResponse) => {
+  switch (imResponse.data.status) {
+    case TWebLive.TYPES.ENTER_ROOM_SUCCESS: // 加入直播间成功
+      break;
+    case TWebLive.TYPES.ALREADY_IN_ROOM: // 已经在直播间内
+      break;
+    default:
+      break;
+  }
+}).catch((imError) => {
+  console.warn('im | enterRoom | failed', imError); // 加入直播间失败的相关信息
+});
+</script>
 ```
 
-##### 2、组件什么时候会选择播放 flv 流？flv 和 hls 直播源的播放时延分别是多少？
+为了进一步降低开发者的开发和人力成本，我们在 TWebLive SDK 的基础上，提供了同时适配 PC 和移动端浏览器的 [Demo](https://github.com/tencentyun/TWebLive)，并开源到了 github。开发者 fork&clone 项目到本地（顺手来个star，谢谢~），稍作修改即可把 Demo 跑起来，或者集成到自己的项目部署上线。
+## 想接入使用，需要做哪些准备工作？
+接入前，您需要：
+- 在 [腾讯云实时音视频 TRTC 控制台](https://console.cloud.tencent.com/trtc/app) 中创建一个实时音视频应用（*此时会自动创建一个 `SDKAppID` 相同的 IM 应用*），取得 `SDKAPPID`。然后应用管理 -> 功能配置 -> 开启自动旁路推流。开启旁路推流功能后， TRTC 房间里的每一路画面都配备一路对应的播放地址（*如果不需要 CDN 直播观看，可略过开启旁路推流的步骤*）。
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/2.png)
+- 在 [腾讯云直播控制台](https://console.cloud.tencent.com/live/) 配置播放域名并完成 CNAME 配置，详细操作指引请参见[《CDN 直播观看》](https://cloud.tencent.com/document/product/647/16826)（*如果不需要 CDN 直播观看，此步骤可略过*）。
+- 通过 npm 下载 TWebLive
+```javascript
+npm i tweblive --save
+```
 
-在支持 MSE 的浏览器上，如 PC Chromium 内核浏览器（360极速浏览器，Chrome浏览器等），或者 [TBS](https://x5.tencent.com/tbs/product/video.html) 模式下(Android 的微信、QQ 浏览器)，组件会优先选择播放 flv 流。播放时延对比：
-| 浏览器 | 播放时延|
-| --- | ---|
-| Windows Chrome 浏览器 | 3s~5s|
-| Mac Chrome 浏览器 | 3s~5s |
-| Mac Safari 浏览器 | 10s~20s |
-| iOS Safari 浏览器 | 10s~20s |
-| iOS 微信 | 10s~20s |
-| Android 微信([TBS](https://x5.tencent.com/tbs/product/video.html)) | 3s~5s |
-| Android QQ 浏览器 | 3s~5s |
-| Android Chrome 浏览器 | 3s~5s |
-| Android 其它浏览器 | 10s~20s |
+## 注意事项
+
+- 实时音视频应用与 IM 应用的 `SDKAppID` 一致，才能复用账号与鉴权。
+- IM 应用针对文本消息，提供基础版本的安全打击能力，如果您希望使用自定义不雅词功能，您可以点击升级或在购买页购买安全打击-专业版服务。
+- 本地计算 UserSig 的方式仅用于本地开发调试，请勿直接发布到线上，一旦您的 `SECRETKEY` 泄露，攻击者就可以盗用您的腾讯云流量。正确的 UserSig 签发方式是将 UserSig 的计算代码集成到您的服务端，并提供面向 App 的接口，在需要 UserSig 时由您的 App 向业务服务器发起请求获取动态 UserSig。更多详情请参见 [服务端生成 UserSig](https://cloud.tencent.com/document/product/269/32688#GeneratingdynamicUserSig)。
+- Web 推流和 Web 低延时观看用到了 WebRTC 技术。目前主要在桌面版 Chrome 浏览器、桌面版 Safari 浏览器以及移动版 Safari 浏览器上有较为完整的支持，其他平台（例如 Android 平台的浏览器）支持情况均比较差。
+- 在移动端推荐使用 [小程序](https://cloud.tencent.com/document/product/647/17018) 解决方案，微信和手机 QQ 小程序均已支持，都是由各平台的 Native 技术实现，音视频性能更好，且针对主流手机品牌进行了定向适配。
+- 如果您的应用场景主要为教育场景，那么教师端推荐使用稳定性更好的 [Electron](https://cloud.tencent.com/document/product/647/38549) 解决方案，支持大小双路画面，更灵活的屏幕分享方案以及更强大的弱网络恢复能力。
+
+| 操作系统 | 浏览器类型 | 浏览器最低版本要求 | 接收（播放）| 发送（上麦）| 屏幕分享 |
+|:-------:|:-------:|:-------:|:-------:|:-------:| :-------:|
+| Mac OS  | 桌面版 Safari 浏览器 |  11+ | 支持 | 支持 | 不支持 |
+| Mac OS  | 桌面版 Chrome 浏览器 |  56+ | 支持 | 支持 | 支持（需要 chrome72+ 版本） |
+| Windows  | 桌面版 Chrome 浏览器|  56+ | 支持 | 支持 | 支持（需要 chrome72+ 版本） |
+| Windows  | 桌面版 QQ 浏览器 |  10.4 | 支持 | 支持 | 不支持 |
+| iOS | 移动版 Safari 浏览器 | 11.1.2 | 支持 | 支持 | 不支持 |
+| iOS | 微信内嵌网页| 12.1.4 | 支持 | 不支持 | 不支持 |
+| Android | 移动版 QQ 浏览器| - | 不支持 | 不支持 | 不支持 |
+| Android | 移动版 UC 浏览器| - | 不支持 | 不支持 | 不支持 |
+| Android | 微信内嵌网页| - | 不支持 | 不支持 | 不支持 |
 
 
-### 参考文档
+## 后续计划
 
-- [腾讯云 Web 直播互动组件 API](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)
-- [腾讯实时音视频 TRTC](https://cloud.tencent.com/document/product/647/16788)
-- [TRTC Electron API](https://cloud.tencent.com/document/product/647/38551)
-- [腾讯云 Web 超级播放器 TcPlayer](https://cloud.tencent.com/document/product/454/7503)
-- [腾讯云即时通信 IM](https://cloud.tencent.com/document/product/269/1498)
-- [WebIM API](https://imsdk-1252463788.file.myqcloud.com/IM_DOC/Web/TIM.html)
+- 推流端支持屏幕分享
+- 图片消息互动
+- 观众端多线路观看（WebRTC 低延时线路和 CDN 线路）
+- 主播观众连麦互动
+- And More...
+
+## 参考文档
+
+- [TWebLive 接口手册](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)

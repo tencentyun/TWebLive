@@ -1673,13 +1673,33 @@
   }
 
   @media only screen and (max-width: 680px) {
+    .testing-title {
+      font-size: 22px;
+    }
+    .testing-prepare-info {
+      font-size: 13px;
+    }
     .browser-remind {
+      width: 80%;
+    }
+    .device {
+      width: 35px;
+      height: 35px;
+    }
+    .mic-testing-container {
       width: 80%;
     }
 
     .remind-info {
       font-size: 22px;
       line-height: 40px;
+    }
+    .device-report-footer {
+      width: 80%;
+      margin: 50px auto 0;
+    }
+    .device-testing-card {
+      width: 96%;
     }
   }
 

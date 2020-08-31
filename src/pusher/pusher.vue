@@ -235,8 +235,7 @@
         this.playUrl.flv = url
         // +'&roomid='+this.chatInfo.groupId
         // https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive-demo-preview/index.html
-        this.playUrl.cdnUrl = '        https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/0.3.2/index.html?flv=' + url
-
+        this.playUrl.cdnUrl = `https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/0.3.2-new-player/index.html?flv=${url}&roomid=${this.chatInfo.groupId}`
         console.log('demo pusher | getLiveStreamURL | ' + url, ' cdn 观看：https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive-preview/index.html?flv=' + url)
       },
       playHandler() {
