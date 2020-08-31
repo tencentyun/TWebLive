@@ -23,7 +23,7 @@ export const IS_IPHONE = (/iPhone/i).test(USER_AGENT) && !IS_IPAD
 export const IS_IPOD = (/iPod/i).test(USER_AGENT)
 export const IS_IOS = IS_IPHONE || IS_IPAD || IS_IPOD
 
-export const IOS_VERSION = (function() {
+export const IOS_VERSION = (function () {
   const match = USER_AGENT.match(/OS (\d+)_/i)
 
   if (match && match[1]) {
@@ -33,7 +33,7 @@ export const IOS_VERSION = (function() {
 }())
 
 export const IS_ANDROID = (/Android/i).test(USER_AGENT)
-export const ANDROID_VERSION = (function() {
+export const ANDROID_VERSION = (function () {
   // This matches Android Major.Minor.Patch versions
   // ANDROID_VERSION is Major.Minor as a Number, if Minor isn't available, then only Major is returned
   const match = USER_AGENT.match(/Android (\d+)(?:\.(\d+))?(?:\.(\d+))*/i)
@@ -54,9 +54,11 @@ export const ANDROID_VERSION = (function() {
 }())
 
 export const IS_TBS = (/TBS\/\d+/i).test(USER_AGENT) // 仅X5内核，QQ浏览器默认x5内核，但是agent没有TBS
-export const TBS_VERSION = (function() {
+export const TBS_VERSION = (function () {
   var match = USER_AGENT.match(/TBS\/(\d+)/i)
-  if (match && match[1]) { return match[1] }
+  if (match && match[1]) {
+    return match[1]
+  }
 })()// X5内核版本
 
 export const IS_MQQB = !IS_TBS && (/MQQBrowser\/\d+/i).test(USER_AGENT) // 移动端QQ浏览器 android QQ也为true
@@ -75,13 +77,13 @@ export const IS_EDGE = (/Edge/i).test(USER_AGENT)
 export const IS_CHROME = (function () {
   if (!IS_EDGE && (/Chrome/i).test(USER_AGENT)) {
     return true
-  } else if((/Safari/i).test(USER_AGENT) && (/CriOS/i).test(USER_AGENT)) {
+  } else if ((/Safari/i).test(USER_AGENT) && (/CriOS/i).test(USER_AGENT)) {
     // ios chrome
     return true
   }
   return false
 }()) && !IS_WECHAT && !IS_MQQB && !IS_QQB
-export const CHROME_VERSION = (function() {
+export const CHROME_VERSION = (function () {
   const match = USER_AGENT.match(/Chrome\/(\d+)/)
   const matchIOS = USER_AGENT.match(/CriOS\/(\d+)/)
   if (match && match[1]) {
@@ -103,7 +105,7 @@ export const IS_IE = (/(msie\s|trident.*rv:)([\w.]+)/i).test(USER_AGENT) // <ie1
 //         return null;
 // }();
 export const IS_IE8 = (/MSIE\s8\.0/).test(USER_AGENT)
-export const IE_VERSION = (function() {
+export const IE_VERSION = (function () {
   const result = (/MSIE\s(\d+)\.\d/).exec(USER_AGENT)
   let version = result && parseFloat(result[1])
 

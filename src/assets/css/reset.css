@@ -32,3 +32,17 @@ a {color: #25a4bb;text-decoration: none;}
     }
 
 }
+.el-popover .play-url {
+    border: none;
+    color: #2d8cf0;
+    line-height: 25px;
+    text-align: justify;
+    font-size: 14px
+}
+.el-popover {
+    width:auto !important;
+    padding: 20px 15px;
+    max-width: 400px;
+
+}
+
