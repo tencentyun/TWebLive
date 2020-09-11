@@ -7,9 +7,6 @@ module.exports = {
   publicPath: './',
   assetsDir: './',
   productionSourceMap: false,
-  devServer:{
-    https:true
-  },
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))
