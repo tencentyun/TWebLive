@@ -46,7 +46,10 @@
                 </span>
               </div>
             </div>
-            <img class="share-img" slot="reference" src="../../../src/assets/image/share.png" />
+            <div slot="reference"  style="">
+              <img class="share-img" src="../../../src/assets/image/share2.png" />
+              <span style="margin-left: 3px;color: #ffffff;font-size: 16px;font-weight: 900">分享观看地址</span>
+            </div>
 
           </el-popover>
         </div>
@@ -260,7 +263,7 @@
     padding-right 10px
   }
  .share-img {
-   height 20px
+   height 24px
  }
   .rel {
     height 36px

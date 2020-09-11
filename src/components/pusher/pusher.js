@@ -39,7 +39,7 @@ export const mixinPusher = {
   },
   created() {
     //todo
-    this.cdnUrl = 'https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive-demo-test/index.html#/player' //'https://localhost:8080/#/player'//
+    this.cdnUrl = 'https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/index.html#/player' //'https://localhost:8080/#/player'//
 
   },
   mounted() {

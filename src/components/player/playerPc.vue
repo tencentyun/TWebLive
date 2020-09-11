@@ -13,11 +13,11 @@
       <div>
         <div class="player-start cursor" v-if="!isPlay" @click="resumeVideo">
           <img class="player-icon" src="../../assets/image/pusher-start.png">
-          <span class="play-text">开启画面传输</span>
+          <span class="play-text">观看直播</span>
         </div>
         <div class="player-start cursor" v-else @click="pauseVideo">
           <img class="player-icon" src="../../assets/image/pusher-stop.png">
-          <span class="play-text">暂停画面传输</span>
+          <span class="play-text">停止观看</span>
         </div>
       </div>
       <div class="volume-box" @mouseover="showSetVolume=true" @mouseout="setPlayoutVolume">

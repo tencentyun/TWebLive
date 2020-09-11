@@ -9,11 +9,11 @@
       <div>
         <div class="pusher-start cursor" v-if="isPush" @click="startPush">
           <img class="pusher-icon" src="../../assets/image/pusher-start.png">
-          <span class="play-text">开启画面传输</span>
+          <span class="play-text">开始直播</span>
         </div>
         <div class="pusher-start cursor" v-else @click="openConfirm">
           <img class="pusher-icon" src="../../assets/image/pusher-stop.png">
-          <span class="play-text">停止画面传输</span>
+          <span class="play-text">结束直播</span>
         </div>
       </div>
       <div>
