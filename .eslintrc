@@ -8,11 +8,17 @@
     "eslint:recommended"
   ],
   "rules": {
-    "no-console": 2,
+    "no-console": 0,
+    "no-undefined": 0,
+    "no-unused-vars": "off",
     "quotes": ["error", "single"],
     "semi": ["error","never"],
-    "space-before-blocks": "error",
-    "space-unary-ops": "error"
+    "space-before-blocks": [2, "always"],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "space-unary-ops": "error",
+    "object-curly-spacing": ["error", "always"],
+    "space-infix-ops": "error",
+    "keyword-spacing": ["error", {"after": true}]
   },
   "parserOptions": {
     "parser": "babel-eslint"

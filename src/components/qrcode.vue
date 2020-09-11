@@ -27,9 +27,18 @@
 </script>
 <style lang="stylus" scoped>
   .result-img {
-    width 300px
-    height 300px
+    display block
+    width 110px
+    height  110px
     margin 0 auto
+  }
+  @media screen and (max-width: 600px) {
+    .result-img {
+      display block
+      width 200px
+      height  200px
+      margin 0 auto
+    }
   }
 
 </style>

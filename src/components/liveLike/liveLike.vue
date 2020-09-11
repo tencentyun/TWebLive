@@ -2,7 +2,7 @@
   <div class="live-like">
     <slot :sendCustomMessage="sendCustomMessage">
       <canvas id="bubble" class="canvas-box"></canvas>
-      <img class="like-img" @click="sendCustomMessage" src="../../assets/image/like.png"/>
+      <img class="like-img" @click="sendCustomMessage" src="../../assets/image/like1.png"/>
     </slot>
   </div>
 </template>
@@ -101,11 +101,7 @@
         this.form.description = ''
         this.form.extension = ''
         if (!this.isSDKReady) {
-          this.$store.commit('showMessage', {
-            message: '请先登录',
-            type: 'warning'
-          })
-          this.$store.commit('toggleIsLogin', true)
+          this.$store.commit('showLogin', true)
           return
         }
         this.likeClick()
@@ -266,10 +262,10 @@
   }
 
   .live-like {
-    position absolute
-    right 0
-    bottom 0
-    z-index 200
+    /*position absolute*/
+    /*right 0*/
+    /*bottom 0*/
+    /*z-index 200*/
   }
 
   .like-box {

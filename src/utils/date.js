@@ -41,5 +41,5 @@ export function isToday(date) {
  * @returns
  */
 function addZeroPrefix(number) {
-  return number < 10 ? `0${number}`:number
+  return number < 10 ? `0${number}` : number
 }
