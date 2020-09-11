@@ -21,7 +21,8 @@ import {
   Radio,
   Select,
   Option,
-  Slider
+  Slider,
+  Message,
 } from 'element-ui'
 import App from './App.vue'
 import store from './store/index'
@@ -34,6 +35,7 @@ import './assets/icon/tim.css'
 import './assets/css/reset.css'
 import './assets/css/animate.css'
 import QRCode from 'qrcode'
+import VueClipboard from 'vue-clipboard2'
 
 
 window.im = im
@@ -45,6 +47,7 @@ Vue.prototype.TWebLive = TWebLive
 Vue.prototype.$store = store
 Vue.prototype.qrcode = QRCode
 Vue.prototype.$confirm = MessageBox.confirm
+
 
 Vue.use(QRCode)
 Vue.use(Button)
@@ -68,6 +71,7 @@ Vue.use(Radio)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Slider)
+Vue.use(VueClipboard)
 
 // 在移动端开发环境下是否开启 vconsole,默认关闭
 showVconsole(false)

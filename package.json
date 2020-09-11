@@ -23,10 +23,11 @@
     "postcss-px-to-viewport": "^1.1.1",
     "postcss-pxtorem": "^5.1.1",
     "qrcode": "^1.4.4",
-    "trtc-js-sdk": "^4.6.2",
-    "tweblive": "^1.0.1",
+    "trtc-js-sdk": "^4.6.3",
+    "tweblive": "^1.0.3",
     "vconsole": "^3.3.4",
     "vue": "^2.6.11",
+    "vue-clipboard2": "^0.3.1",
     "vue-router": "^3.4.3",
     "vuex": "^3.1.2",
     "xmlhttprequest": "^1.8.0"

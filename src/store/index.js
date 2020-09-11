@@ -10,7 +10,12 @@ export default new Vuex.Store({
   state: {
     current: Date.now(), // 当前时间
     intervalID: 0,
-    message: undefined
+    message: undefined,
+    tips:{
+      status:false,
+      content:'',
+      title:''
+    }
   },
   getters: {
     hidden(state) {
@@ -39,9 +44,14 @@ export default new Vuex.Store({
       state.message = Message({
         message: options.message,
         type: options.type || 'success',
-        duration: options.duration || 2000,
+        duration: options.duration || 2000, //2000
         offset: 40
       })
+    },
+    showTips(state, data) {
+      state.tips.status = data.status
+      state.tips.content = data.content
+      state.tips.title = data.title || '提示'
     }
   },
   modules: {

@@ -14,7 +14,7 @@ export function decodeText (text) {
 
   let left = -1
     let right = -1
-    while (temp !== ''&& typeof temp !== 'undefined') {
+    while (temp !== '' && typeof temp !== 'undefined') {
       left = temp.indexOf('[')
       right = temp.indexOf(']')
       switch (left) {

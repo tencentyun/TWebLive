@@ -1,41 +1,50 @@
-// import Vue from 'vue'
-// import Router from 'vue-router'
-// // import { isLogin } from './store/modules/user'
-//
-// Vue.use(Router)
-// // Vue.use(Loading);
-// const router= new Router({
-//     // mode: 'history',
-//     base:'/tweblive-demo-test',
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'login',
-//       component: () => import('./components/sms-login/index')
-//     },
-//
-//     {
-//       path: '/pc-pusher',
-//       name: 'pusherPc',
-//       component: () => import(/* webpackChunkName: "group-pusher" */ './pusher/IndexPc')
-//     },
-//     {
-//       path: '/pc-player',
-//       name: 'playerPc',
-//       component: () => import(/* webpackChunkName: "group-player" */'./player/IndexPc')
-//     },
-//     {
-//       path: '/mobile-pusher',
-//       name: 'pusherMobile',
-//       component: () => import(/* webpackChunkName: "group-pusher" */ './pusher/IndexMobile')
-//     },
-//     {
-//       path: '/mobile-player',
-//       name: 'playerMobile',
-//       component: () => import(/* webpackChunkName: "group-player" */'./player/IndexMobile')
-//     }
-//     ]
-// })
-//
-//
-// export default router
+import Vue from 'vue'
+import Router from 'vue-router'
+import store from './store'
+
+Vue.use(Router)
+const router = new Router({
+  // mode: 'history',
+  // base:'/tweblive-demo-test',
+  routes: [
+    {
+      path: '/',
+      name: 'login',
+      component: () => import('./pages/login/login')
+    },
+
+    {
+      path: '/pusher',
+      name: 'pusher',
+      component: () => import(/* webpackChunkName: "group-tweblive" */ './pages/pusher/pusher')
+    },
+    {
+      path: '/player',
+      name: 'player',
+      component: () => import(/* webpackChunkName: "group-tweblive" */'./pages/player/player')
+    },
+  ]
+})
+router.beforeEach((to, from, next) => {
+  // 判断是否登录
+  const outerPaths = ['/']
+  let playType = to.query.type
+  if (outerPaths.includes(to.path)) {   //进入登录页面
+    next()
+    return
+  }
+  if (playType !== 'cdn') {
+    if (!store.state.user.isLogin ) {
+      next({
+        path: '/'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+
+})
+
+export default router

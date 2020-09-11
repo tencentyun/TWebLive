@@ -4,6 +4,12 @@ const conversationModules = {
   state: {
     currentMessageList: [],
     currentLiveTips: [],
+    playType: 'WebRTC',   //默认webRTC 播放，cdn
+    showLogin: false, //是否展示登录
+    pushInfo:{
+      playUrl:'',
+      isPushing:false
+    },
     chatInfo: {
       groupId: '',
       userId: '',
@@ -20,11 +26,25 @@ const conversationModules = {
     setRole(state, data) {
       state.chatInfo.role = data
     },
+    setPlayInfo(state, data) {
+      state.pushInfo.playUrl = data
+    },
+    setIsPushing(state, data) {
+      state.pushInfo.isPushing = data
+    },
+    setGroupId(state, data) {
+      state.chatInfo.groupId = data
+    },
+    setPlayType(state, data) {
+      state.playType = data
+    },
+    showLogin(state, data) {
+      state.showLogin = data
+    },
     setChatInfo(state, data) {
       state.chatInfo.groupId = data.roomID
       state.chatInfo.userId = data.userID
       state.chatInfo.userSig = data.userSig
-      state.chatInfo.streamId = data.streamID
       state.chatInfo.role = data.role
       state.chatInfo.resolution = data.resolution
     },
