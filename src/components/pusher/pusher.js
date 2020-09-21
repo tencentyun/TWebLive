@@ -40,7 +40,7 @@ export const mixinPusher = {
   created() {
     //todo
 
-    this.cdnUrl = 'https://' + window.location.host + window.location.pathname + '#/player'
+    this.cdnUrl = window.location.origin + window.location.pathname + '#/player'
     console.log('cdn播放地址', this.cdnUrl)
   },
   mounted() {
