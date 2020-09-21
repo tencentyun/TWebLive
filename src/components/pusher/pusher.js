@@ -39,8 +39,9 @@ export const mixinPusher = {
   },
   created() {
     //todo
-    this.cdnUrl = 'https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/index.html#/player' //'https://localhost:8080/#/player'//
 
+    this.cdnUrl = 'https://' + window.location.host + window.location.pathname + '#/player'
+    console.log('cdn播放地址', this.cdnUrl)
   },
   mounted() {
     // 初始化监听器

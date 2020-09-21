@@ -231,6 +231,7 @@ export const mixinChat = {
         roomID: this.chatInfo.groupId
       })
       promise.then((imResponse) => { // 创建成功
+        console.log(`创建了直播间${this.chatInfo.groupId}`)
         this.enterRoom()
       }).catch((imError) => {
         // 10021:群组 ID 已被使用，请选择其他的群组 ID。
