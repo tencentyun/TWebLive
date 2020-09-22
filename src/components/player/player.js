@@ -62,6 +62,7 @@ export const mixinPlayer = {
       let flv = query.flv
       if (roomId) {
         this.$store.commit('setGroupId', roomId)
+        console.log('设置roomId')
       }
       if (flv && isValidFlv(flv)) {
         let hls = flv.replace('flv', 'm3u8')
