@@ -92,21 +92,16 @@ export const mixinChat = {
     this.keepMessageListOnButtom()
 
   },
-
   created() {
 
   },
   mounted() {
-    this.initListener()
-    if (this.playType !== 'cdn') {
-      this.webLiveLogin()
-    }
-    // 游客加群
-    if (this.playType === 'cdn') {
-      this.enterRoom()
-    }
+
   },
   methods: {
+    githubHandler() {
+      window.open('https://github.com/tencentyun/TWebLive', '_blank')
+    },
     initListener() {
       // 登录成功后会触发 SDK_READY 事件，该事件触发后，可正常使用 SDK 接口
       this.im.on(this.TWebLive.EVENT.IM_READY, this.onReadyStateUpdate)

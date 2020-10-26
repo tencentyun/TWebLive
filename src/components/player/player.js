@@ -1,9 +1,11 @@
 import { mapState } from 'vuex'
 import Vue from 'vue'
-import { getUrlKey, isValidFlv } from '../../../src/utils/common'
+import bg from '../../assets/image/video-gb.png'
 export const mixinPlayer = {
   data() {
     return {
+      share_url:'',
+      isShow_playUrl:false,
       timer_record: null,
       time_value:{
         hour:0,
@@ -18,6 +20,7 @@ export const mixinPlayer = {
       playContent: '暂停',
       isPlay: true,
       _timer:0,
+      live_title:'',
       cdnPlayUrl:{
         flv:'',
         hls:''
@@ -37,59 +40,72 @@ export const mixinPlayer = {
   },
   created() {
     this.cdnPlay()
+    this.enterRoom()   //游客匿名加群
   },
   mounted() {
     // 初始化监听器
     this.initListener()
-
   },
   destroyed() {
     this.stopPlay()
   },
   methods: {
-    cdnPlay() {
-      // CDN 播放
-      let play_url = window.location.href
-      this.$store.commit('setPlayInfo', play_url)
-      let query = this.$route.query
-      if (query.type !== 'cdn') {
-        return
-      }
-      let play_type = query.type
-      this.$store.commit('setPlayType', play_type)
 
-      let roomId  = query.roomid
-      let flv = query.flv
-      if (roomId) {
-        this.$store.commit('setGroupId', roomId)
-        console.log('设置roomId')
+    cdnPlay() {
+      // CDN  分享 播放
+      this.$store.commit('setPlayType', 'cdn')
+      let share_Url = window.location.origin + window.location.pathname + '#/player'
+
+      let query = this.$route.query
+      if (query.type === 'cdn') {
+        let roomId  = query.roomid
+        // let flv = query.flv
+        if (roomId) {
+           this.$store.commit('setGroupId', roomId)
+         }
       }
-      if (flv && isValidFlv(flv)) {
-        let hls = flv.replace('flv', 'm3u8')
-        this.cdnPlayUrl.flv = flv
-        this.cdnPlayUrl.hls = hls
-      }
+      let anchorId = this.$route.query.anchorId
+      this.live_title = this.$route.query.title
+      let streamID = `${this.chatInfo.sdkAppID}_${this.chatInfo.groupId}_${anchorId}_main`
+      this.cdnPlayUrl.flv = `https://3891.liveplay.myqcloud.com/live/${streamID}.flv`
+      this.cdnPlayUrl.hls = `https://3891.liveplay.myqcloud.com/live/${streamID}.m3u8`
+      let play_url = `${share_Url}?type=cdn&anchorId=${anchorId}&roomid=${this.chatInfo.groupId}&title=${this.live_title}`
+      this.share_url = play_url
+      this.$store.commit('setPlayInfo', play_url)
+    },
+
+    // 加入直播间
+    enterRoom() {
+      this.im.enterRoom(this.chatInfo.groupId).then((imResponse) => {
+        const status = imResponse.data.status
+        if (status === this.TWebLive.TYPES.ENTER_ROOM_SUCCESS || status === this.TWebLive.TYPES.ALREADY_IN_ROOM) {
+          console.log(this.chatInfo.groupId, '观众匿名加入直播间')
+
+        }
+      }).catch((imError) => {
+        console.log('失败', imError)
+        if (imError.code === 10007 || imError.code === 10015) {
+          this.$store.commit('showMessage', { type: 'warning', message: '直播间可能已解散' })
+        }
+      })
     },
     initListener() {
       const player = Vue.prototype.TWebLive.createPlayer()
       window.player = player
       Vue.prototype.player = player
-      if (this.playType === 'cdn') {
         this.player.setCustomConfig({
           autoplay: true,
-          // poster: {style:'cover', src:bg},
-          // pausePosterEnabled: false,
+          poster: { style:'cover', src:bg },
+          pausePosterEnabled: false,
           wording: {
-            1:'主播不在，先在直播间聊聊天吧~ ',
-            2:'主播不在，先在直播间聊聊天吧~ ',
-            4:'主播不在，先在直播间聊聊天吧~ ',
+            1:'您观看的直播已结束哦~ ',
+            2:'您观看的直播已结束哦~ ',
+            4:'您观看的直播已结束哦~ ',
             13:'您观看的直播已结束',
             2032: '请求视频失败，请检查网络',
             2048: '请求m3u8文件失败，可能是网络错误或者跨域问题'
           }
         })
-      }
-
       this.setRenderView()
       // 播放时
       this.player.on(this.TWebLive.EVENT.PLAYER_PLAYING, this.onPlayerPlaying)
@@ -145,10 +161,12 @@ export const mixinPlayer = {
       let userSig = this.chatInfo.userSig
       let SDKAppID = this.chatInfo.sdkAppID
       let roomID = this.chatInfo.groupId
-      let url = `room://sdkappid=${SDKAppID}&roomid=${roomID}&userid=${userID}&usersig=${userSig}`
-      if (this.playType === 'cdn') {
-        url = `https://flv=${this.cdnPlayUrl.flv}&hls=${this.cdnPlayUrl.hls}`
-      }
+      // let url = `room://sdkappid=${SDKAppID}&roomid=${roomID}&userid=${userID}&usersig=${userSig}`
+      // if (this.playType === 'cdn') {
+      //   url = `https://flv=${this.cdnPlayUrl.flv}&hls=${this.cdnPlayUrl.hls}`
+      // }
+      let url = `https://flv=${encodeURIComponent(this.cdnPlayUrl.flv)}&hls=${encodeURIComponent(this.cdnPlayUrl.hls)}`
+
       this.player.startPlay(url).then(() => {
         console.log('demo player | startPlay | ok')
         this.timeRecord()
@@ -183,7 +201,6 @@ export const mixinPlayer = {
     },
     // 正在播放
     isPlaying() {
-      console.log('正在播放')
       return this.player.isPlaying()
     },
     //
@@ -202,6 +219,9 @@ export const mixinPlayer = {
       console.log('demo player | stopPlay | ok')
       clearInterval(this.timer_record)
       this.isPlay = false
+    },
+    shareHandler() {
+      this.isShow_playUrl = true
     },
     // 计时器
     timeRecord() {

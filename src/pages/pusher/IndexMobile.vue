@@ -1,7 +1,6 @@
 <template>
-  <div class="container-mobile">
     <div class="container-mobile">
-      <img class="quit-btn" @click="open" src="../../assets/image/quit.png"/>
+<!--      <img class="quit-btn" @click="open" src="../../assets/image/quit.png"/>-->
       <div class="video-box">
         <pusher></pusher>
       </div>
@@ -9,7 +8,6 @@
         <NewChat/>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -41,8 +39,12 @@
     },
 
     destroyed() {
-      this.logout()
+      this.$store.commit('reset')
+      // todo 解散群组，群主不能退出
+      // this.exitRoom()
+      // this.logout()
     },
+
     methods: {
       open() {
         this.$confirm('确认要退出吗？退出之后不能再参与直播互动了哦~', '提示', {
@@ -76,20 +78,27 @@
           await this.exitRoom()
           await this._logout()
         }
-        window.location.reload()
+        // window.location.reload()
       }
     }
   }
 </script>
 
 <style scoped lang="stylus">
+    /deep/ .like-img {
+        display none
+    }
   .container-mobile {
+    position absolute
+    top 0
+    bottom 0
+    left 0
+    right 0
     width 100%
     height 100vh
     margin 0 auto
     overflow hidden
-    background rgba(0, 0, 0, 0.28)
-
+    z-index 2
     .video-box {
       width 100%
       height 100%
@@ -140,10 +149,10 @@
     }
 
     .chat-mobile {
-      position absolute
+      position fixed
       /*height 210px*/
       width 100%
-      bottom 95px
+      bottom 55px
       display flex
       justify-content center
 

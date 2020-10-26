@@ -37,28 +37,31 @@
       <Tips></Tips>
     </div>
     <div class="send-header-bar">
-      <el-popover trigger="click">
-        <div class="emojis">
-          <div v-for="item in emojiName" class="emoji" :key="item" @click="chooseEmoji(item)">
-            <img :src="emojiUrl + emojiMap[item]" style="width:30px;height:30px"/>
+      <div class="send-box">
+        <el-popover trigger="click">
+          <div class="emojis">
+            <div v-for="item in emojiName" class="emoji" :key="item" @click="chooseEmoji(item)">
+              <img :src="emojiUrl + emojiMap[item]" style="width:30px;height:30px"/>
+            </div>
           </div>
-        </div>
-        <i class="iconfont icon-smile" slot="reference" title="发表情"></i>
-      </el-popover>
-      <div class="send-header-box" v-if="!isSDKReady && playType==='cdn'" @click="checkLogin"></div>
-      <el-input
-          ref="mobileInput"
-          id="sendInput"
-          placeholder="来说点什么吧~"
-          v-model="messageContent"
-          @focus="handleMobileInputFocus"
-          @blur="handleMobileInputBlur"
-          @keyup.enter.native="hcreatedandleEnter"
-          @keyup.ctrl.enter.prevent.exact="handleLine"
-      >
-      </el-input>
-      <img class="send-btn" src="../../assets/image/send1.png" @click="sendTextMessage">
-      <img class="send-btn" src="../../assets/image/message.png" @click="showMessage=!showMessage">
+          <i class="iconfont icon-smile" slot="reference" title="发表情"></i>
+        </el-popover>
+        <div class="send-header-box" v-if="!isSDKReady && playType==='cdn'" @click="checkLogin"></div>
+        <el-input
+                ref="mobileInput"
+                id="sendInput"
+                placeholder="来说点什么吧~"
+                v-model="messageContent"
+                @focus="handleMobileInputFocus"
+                @blur="handleMobileInputBlur"
+                @keyup.enter.native="handleEnter"
+                @keyup.ctrl.enter.prevent.exact="handleLine"
+        >
+        </el-input>
+        <p class="send-btn"  @click="sendTextMessage">发送</p>
+      </div>
+
+<!--      <img class="send-btn" src="../../assets/image/message.png" @click="showMessage=!showMessage">-->
       <liveLike>
         <template slot-scope="{sendCustomMessage}">
           <canvas id="bubble" class="canvas-box"></canvas>
@@ -200,9 +203,10 @@
       background rgba(0, 0, 0, 0.66)
 
       .message-nick {
-        font-size 14px
-        line-height: 22px
-        color #f5a623
+        font-family: PingFangSC-Regular;
+        font-size: 12px;
+        line-height: 18px
+        color #A3EDFF
         font-weight 500
         padding-left 5px
       }
@@ -284,13 +288,19 @@
     position fixed
     /*margin:0 auto;*/
     width 100%
-    padding 2px 65px 2px 20px
+    padding 2px 35px 2px 10px
     bottom 6px
     display flex
     justify-content space-between
     box-sizing border-box
   }
-
+  .send-box {
+    display flex
+    width calc(100% - 120px)
+    border: 1px solid rgba(255,255,255,0.20);
+    background: rgba(0,0,0,0.30);
+    border-radius: 20px;
+  }
   .send-header-bar span {
     display flex
     justify-content center
@@ -303,7 +313,8 @@
     font-size 28px
     color #FFFFFF
     /*line-height 24px*/
-    margin 0 12px 0 0
+    margin 4px 2px 0 4px
+
   }
 
   .send-header-bar i:hover {
@@ -311,7 +322,7 @@
   }
 
   .el-input /deep/ {
-    width 60%
+    width 70%
     /*border-radius 50%*/
     border none
     outline none
@@ -326,14 +337,23 @@
     height 32px
     line-height 32px
     border-radius 20px
+    padding 0 8px
   }
 
   .send-btn {
     /*display flex*/
+    font-size 14px
     position relative
-    height 32px
-    margin 0 5px
-
+    margin-top 1px
+    height 34px
+    /*width 20px*/
+    padding 0 10px
+    line-height 34px
+    border-radius 20px
+    color #ffffff
+    background-color #2864F0
+    min-width 32px
+    margin-right 1px
     .send-input {
       position absolute
       right 10px

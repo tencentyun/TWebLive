@@ -96,7 +96,6 @@
     },
     methods: {
       sendCustomMessage() {
-        console.log('123456')
         this.form.data = 'like'
         this.form.description = ''
         this.form.extension = ''

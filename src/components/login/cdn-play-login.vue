@@ -1,53 +1,53 @@
 <template>
-  <div class="login-container">
-    <div class="login-wrapper">
-      <img class="close cursor" :src="close" @click="closeLogin"/>
+    <div class="login-container">
+        <div class="login-wrapper">
+            <img class="close cursor" :src="close" @click="closeLogin"/>
 
-      <!-- 顶部三个蓝条 -->
-      <div class="row-div" style="width: 100%; height: 10px">
-        <div style="width: 190px; height: 100%; background-color: #006EFF"></div>
-        <div style="width: 160px; height: 100%; background-color: #00A4FF"></div>
-        <div style="width: 100px; height: 100%; background-color: #5AD5E0"></div>
-      </div>
-      <!-- 腾讯云logo -->
-      <div class="row-div" style="width: 100%; height: 100px; justify-content: center">
-        <img style="height: 23px" :src="txcLogo" alt="">
-      </div>
-      <!-- 登录操作区-->
-      <el-form ref="login" label-width="120" :rules="rules" :model="form" class="loginBox">
-        <el-form-item  prop="userID">
-          <div class="label-item active">
-            <label class="input-label">用户ID:</label>
-            <el-input id="userID" v-model="form.userID"
-                      placeholder=""
-                      type="text"
-                       >
+            <!-- 顶部三个蓝条 -->
+            <div class="row-div" style="width: 100%; height: 10px">
+                <div style="width: 190px; height: 100%; background-color: #006EFF"></div>
+                <div style="width: 160px; height: 100%; background-color: #00A4FF"></div>
+                <div style="width: 100px; height: 100%; background-color: #5AD5E0"></div>
+            </div>
+            <!-- 腾讯云logo -->
+            <div class="row-div" style="width: 100%; height: 100px; justify-content: center">
+                <img style="height: 23px" :src="txcLogo" alt="">
+            </div>
+            <!-- 登录操作区-->
+            <el-form ref="login" label-width="120" :rules="rules" :model="form" class="loginBox">
+                <el-form-item  prop="userID">
+                    <div class="label-item active">
+                        <label class="input-label">用户ID:</label>
+                        <el-input id="userID" v-model="form.userID"
+                                  placeholder=""
+                                  type="text"
+                        >
 
-            </el-input>
-          </div>
-          <!--            <el-input id="userID" v-model="form.userID" type="text" :disabled="true"></el-input>-->
-        </el-form-item>
-        <el-form-item prop="roomID">
-          <div class="label-item" :class="{active:isActive.roomID || form.roomID!==''}">
-            <label class="input-label">房间号:</label>
-            <el-input id="roomID" v-model.number="form.roomID"
-                      type='number'
-                      @focus="isActive.roomID=true"
-                      @blur="form.roomID===''? isActive.roomID=false:true"
-                      placeholder=""
-                      maxLength='18'
-            >
+                        </el-input>
+                    </div>
+                    <!--            <el-input id="userID" v-model="form.userID" type="text" :disabled="true"></el-input>-->
+                </el-form-item>
+                <el-form-item prop="roomID">
+                    <div class="label-item" :class="{active:isActive.roomID || form.roomID!==''}">
+                        <label class="input-label">房间号:</label>
+                        <el-input id="roomID" v-model.number="form.roomID"
+                                  type='number'
+                                  @focus="isActive.roomID=true"
+                                  @blur="form.roomID===''? isActive.roomID=false:true"
+                                  placeholder=""
+                                  maxLength='18'
+                        >
 
-            </el-input>
-          </div>
-        </el-form-item>
-        <el-form-item style="margin-top: 30px;margin-bottom: 20px">
-          <el-button class="login-im-btn" type="primary" @click="webLiveLogin" :loading="loading">进入房间</el-button>
-        </el-form-item>
-      </el-form>
+                        </el-input>
+                    </div>
+                </el-form-item>
+                <el-form-item style="margin-top: 30px;margin-bottom: 20px">
+                    <el-button class="login-im-btn" type="primary" @click="webLiveLogin" :loading="loading">进入房间</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+
     </div>
-
-  </div>
 </template>
 
 <script>
@@ -156,193 +156,193 @@
 </script>
 
 <style lang="stylus" scoped>
-  .login-container {
-    z-index 9999
-    background rgba(0, 0, 0, 0.5);
-    width 100%
-    height 100%
-    position fixed;
-    top 0
-    left 0
-    justify-content center
-    align-items center
-    display flex
-  }
-  .close {
-    display block
-    width 20px
-    height 20px
-    position absolute
-    right 10px
-    top 10px
-  }
-  .guide-box {
-    position fixed
-    left 0
-    right 0
-    bottom 0
-    top 0
-    background rgba(0, 0, 0, 0.84)
-    z-index 9999
-    padding 0 20px
-
-    & img {
-      width 100%
-      height 200px
-    }
-
-    .guide-text {
-      font-size 20px
-      line-height 32px
-      color #ffffff
-
-      & i {
-        width 1px
-        height 1px
-        border-radius 50%
-        background #ffffff
-      }
-    }
-
-  }
-
-  .login-wrapper
-    position relative
-    display flex
-    align-items center
-    flex-direction column
-    width 450px
-    background $white
-    color $black
-    border-radius 5px
-    box-shadow: 0 11px 20px 0 rgba(0, 0, 0, 0.3)
-
-    .row-div
-      display flex
-      justify-content center
-      align-items center
-      flex-direction row
-
-    .logo
-      width 110px
-      height 110px
-
-    .loginBox
-      width 320px
-      margin 0 0 10px 0
-
-      .get-code-item
-        position relative
-
-        .send-code
-          position absolute
-          right 0
-          top 0
-          width 112px
-          text-align center
-          color #409EFF
-          cursor pointer
-
-        .counter
-          color #777
-          font-size 14px
-
-      .login-im-btn, .logout-account-btn
+    .login-container {
+        z-index 9999
+        background rgba(0, 0, 0, 0.5);
         width 100%
-
-    .loginFooter
-      color: #8c8a8a c7
-      text-align: center
-      padding: 0 0 20px 0
-      cursor: pointer
-
-
-  /*input     */
-
-  .el-input /deep/ {
-    border-bottom 1px solid #eaeaea
-    outline none
-    /*margin-left 20px*/
-  }
-
-  .active .el-input /deep/ {
-    border-bottom 1px solid #2d8cf0
-    outline none
-  }
-
-  .el-input /deep/ .el-input__inner {
-    /*color #ffffff*/
-    // background linear-gradient(90deg,#32374d,#262b44);
-    /*border-radius 50%*/
-    border none
-    outline none
-    height 24px
-    line-height 24px
-    border-radius 0px
-    display: block;
-    margin-top: 18px;
-    font-size 16px
-    font-family: inherit;
-    /*font-size: inherit;*/
-  }
-
-  /deep/ .el-input.is-disabled .el-input__inner {
-    background-color #ffffff
-  }
-
-  /deep/ .el-form-item {
-    margin-bottom 10px
-  }
-
-  .resolution-text {
-    color: #999;
-    padding-right 10px
-
-  }
-
-  .label-item {
-    position: relative;
-
-    .input-label {
-      z-index 2000
-      top: -15px;
-      left: 0px;
-      position: absolute;
-      -webkit-transform: translateY(22px) scale(1);
-      transform: translateY(22px) scale(1);
-      display: block;
-      color: #999;
-      -webkit-transform-origin: top left;
-      transform-origin: top left;
-      -webkit-transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, -webkit-transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
-      transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, -webkit-transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
-      transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
-      transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, transform .2s cubic-bezier(0, 0, .2, 1) 0ms, -webkit-transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
+        height 100%
+        position fixed;
+        top 0
+        left 0
+        justify-content center
+        align-items center
+        display flex
     }
-  }
+    .close {
+        display block
+        width 20px
+        height 20px
+        position absolute
+        right 10px
+        top 10px
+    }
+    .guide-box {
+        position fixed
+        left 0
+        right 0
+        bottom 0
+        top 0
+        background rgba(0, 0, 0, 0.84)
+        z-index 9999
+        padding 0 20px
 
-  .label-item.active .input-label {
-    color: #999;
-    -webkit-transform: translateY(1.5px) scale(.75);
-    transform: translateY(1.5px) scale(.75);
-    left: 0;
-  }
+        & img {
+            width 100%
+            height 200px
+        }
 
-  /deep/ input::-webkit-inner-spin-button {
-    display none
-  }
+        .guide-text {
+            font-size 20px
+            line-height 32px
+            color #ffffff
 
-  //移动端
-  @media screen  and (max-width: 776px) {
-    .login-wrapper {
-      width 92%
+            & i {
+                width 1px
+                height 1px
+                border-radius 50%
+                background #ffffff
+            }
+        }
 
     }
 
-    .login-wrapper .loginBox {
-      width 90%
+    .login-wrapper
+        position relative
+        display flex
+        align-items center
+        flex-direction column
+        width 450px
+        background $white
+        color $black
+        border-radius 5px
+        box-shadow: 0 11px 20px 0 rgba(0, 0, 0, 0.3)
+
+        .row-div
+            display flex
+            justify-content center
+            align-items center
+            flex-direction row
+
+        .logo
+            width 110px
+            height 110px
+
+        .loginBox
+            width 320px
+            margin 0 0 10px 0
+
+            .get-code-item
+                position relative
+
+                .send-code
+                    position absolute
+                    right 0
+                    top 0
+                    width 112px
+                    text-align center
+                    color #409EFF
+                    cursor pointer
+
+                .counter
+                    color #777
+                    font-size 14px
+
+            .login-im-btn, .logout-account-btn
+                width 100%
+
+        .loginFooter
+            color: #8c8a8a c7
+            text-align: center
+            padding: 0 0 20px 0
+            cursor: pointer
+
+
+    /*input     */
+
+    .el-input /deep/ {
+        border-bottom 1px solid #eaeaea
+        outline none
+        /*margin-left 20px*/
     }
-  }
+
+    .active .el-input /deep/ {
+        border-bottom 1px solid #2d8cf0
+        outline none
+    }
+
+    .el-input /deep/ .el-input__inner {
+        /*color #ffffff*/
+        // background linear-gradient(90deg,#32374d,#262b44);
+        /*border-radius 50%*/
+        border none
+        outline none
+        height 24px
+        line-height 24px
+        border-radius 0px
+        display: block;
+        margin-top: 18px;
+        font-size 16px
+        font-family: inherit;
+        /*font-size: inherit;*/
+    }
+
+    /deep/ .el-input.is-disabled .el-input__inner {
+        background-color #ffffff
+    }
+
+    /deep/ .el-form-item {
+        margin-bottom 10px
+    }
+
+    .resolution-text {
+        color: #999;
+        padding-right 10px
+
+    }
+
+    .label-item {
+        position: relative;
+
+        .input-label {
+            z-index 2000
+            top: -15px;
+            left: 0px;
+            position: absolute;
+            -webkit-transform: translateY(22px) scale(1);
+            transform: translateY(22px) scale(1);
+            display: block;
+            color: #999;
+            -webkit-transform-origin: top left;
+            transform-origin: top left;
+            -webkit-transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, -webkit-transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
+            transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, -webkit-transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
+            transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
+            transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms, transform .2s cubic-bezier(0, 0, .2, 1) 0ms, -webkit-transform .2s cubic-bezier(0, 0, .2, 1) 0ms;
+        }
+    }
+
+    .label-item.active .input-label {
+        color: #999;
+        -webkit-transform: translateY(1.5px) scale(.75);
+        transform: translateY(1.5px) scale(.75);
+        left: 0;
+    }
+
+    /deep/ input::-webkit-inner-spin-button {
+        display none
+    }
+
+    //移动端
+    @media screen  and (max-width: 776px) {
+        .login-wrapper {
+            width 92%
+
+        }
+
+        .login-wrapper .loginBox {
+            width 90%
+        }
+    }
 
 
 </style>

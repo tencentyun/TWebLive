@@ -1,7 +1,7 @@
 <template>
   <div class="pusher-container">
     <div class="live-pc">
-      <Header @logout="logout"/>
+      <Header/>
       <div class="login-container" v-if="showLogin" >
         <Login/>
       </div>
@@ -53,7 +53,10 @@
       }),
     },
     destroyed() {
-      this.logout()
+      this.$store.commit('reset')
+      this.exitRoom()
+
+      // this.logout()
     },
 
     methods: {
@@ -88,7 +91,7 @@
   }
 
   .pusher-container {
-    z-index 999
+    z-index 1
     background #2B2C2F;
     width 100%
     height 100%

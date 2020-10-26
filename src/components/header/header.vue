@@ -14,47 +14,49 @@
                 <el-button type="primary" @click="setMyProfile">确 定</el-button>
             </span>
     </el-dialog>
-    <div class="direct-one">
+    <div class="direct-one"  :class="{ 'direct-two' : fullPath ==='/' }">
       <div class="direct-security">
-        <div class="direct-one-title">
+        <slot>
+          <div class="direct-one-title">
             <img class="logo-img" src="../../assets/image/logo.png"/>
             <span class="room-num">直播房间（ID-{{chatInfo.groupId}}）</span>
             <slot>
               <span class="push-text" v-if="pushInfo.isPushing">直播中...</span>
             </slot>
-        </div>
-        <div  style="margin-right: 10px;position: absolute;right: 28%;cursor: pointer">
-          <el-popover
-                  placement="top-end"
-                  title=""
-                  width="200"
-                  trigger="hover"
-                  content=""
-          >
-            <div>
-              <div style="display: flex;justify-content: space-around">
-                <p class="share-title">扫码分享</p>
-                <p class="share-title">复制链接分享</p>
-              </div>
-              <p  class="share-title" v-if="!pushInfo.playUrl" style="font-size: 12px">开启画面传输就可以分享哦~</p>
-              <p class="share-text" v-else>扫码手机观看或分享给好友</p>
-              <div class="qr-box" v-if="pushInfo.playUrl">
-                <QRCode class="share-qr"  :url="pushInfo.playUrl"/>
-                <el-divider direction="vertical"></el-divider>
-                <span class="copy-btn cursor" v-clipboard:copy="pushInfo.playUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">
+          </div>
+          <div  style="margin-right: 10px;position: absolute;right: 28%;cursor: pointer">
+            <el-popover
+                    placement="top-end"
+                    title=""
+                    width="200"
+                    trigger="hover"
+                    content=""
+            >
+              <div>
+                <div style="display: flex;justify-content: space-around">
+                  <p class="share-title">扫码分享</p>
+                  <p class="share-title">复制链接分享</p>
+                </div>
+                <p  class="share-title" v-if="!pushInfo.playUrl" style="font-size: 12px">开启画面传输就可以分享哦~</p>
+                <p class="share-text" v-else>扫码手机观看或分享给好友</p>
+                <div class="qr-box" v-if="pushInfo.playUrl">
+                  <QRCode class="share-qr"  :url="pushInfo.playUrl"/>
+                  <el-divider direction="vertical"></el-divider>
+                  <span class="copy-btn cursor" v-clipboard:copy="pushInfo.playUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">
                   <img class="copy-img" src="../../assets/image/copy-1.png">
                 </span>
+                </div>
               </div>
-            </div>
-            <div slot="reference"  style="">
-              <img class="share-img" src="../../../src/assets/image/share2.png" />
-              <span style="margin-left: 3px;color: #ffffff;font-size: 16px;font-weight: 900">分享观看地址</span>
-            </div>
+              <div slot="reference"  style="">
+                <img class="share-img" src="../../../src/assets/image/share2.png" />
+                <span style="margin-left: 3px;color: #ffffff;font-size: 16px;font-weight: 900">分享观看地址</span>
+              </div>
 
-          </el-popover>
-        </div>
-        <div class="rel">
-          <div class="to-login cursor" v-if="!isSDKReady && playType==='cdn'" @click="login">登录</div>
+            </el-popover>
+          </div>
+        </slot>
+        <div class="rel" :class="{ '_rel' : fullPath ==='/' }">
+          <div class="to-login cursor" v-if="!isSDKReady" @click="login">登录</div>
           <el-dropdown v-else @command="handleCommand">
             <div style="display: flex">
               <img class="header-img" :src="userInfo.avatar" @error="imgError(userInfo)"/>
@@ -89,6 +91,8 @@
     },
     computed: {
       ...mapState({
+        fullPath:state => state.conversation.fullPath,
+        showLogin: state => state.conversation.showLogin,
         playType: state => state.conversation.playType,
         pushInfo:state => state.conversation.pushInfo,
         chatInfo: state => state.conversation.chatInfo,
@@ -97,6 +101,9 @@
         isSDKReady: state => state.user.isSDKReady,
         userID: state => state.conversation.chatInfo.userId
       }),
+    },
+    created() {
+    // this.login()
     },
     methods: {
       onCopy (e) {
@@ -112,6 +119,7 @@
         })
       },
       login() {
+
         this.$store.commit('showLogin', true)
         // this.$emit()
       },
@@ -129,7 +137,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('logout')
+          this.logout()
+          // this.$emit('logout')
         }).catch(() => {
           this.$store.commit('showMessage', {
             message: '已取消退出',
@@ -137,6 +146,29 @@
           })
         })
       },
+
+      exitRoom() {
+        this.im.exitRoom(this.chatInfo.groupId).then(() => {
+
+        })
+      },
+      _logout() {
+        this.im.logout().then(() => {
+          this.$store.commit('toggleIsSDKReady', false)
+          this.$router.push('/')
+          // this.$store.commit('reset')
+          this.$store.commit('showMessage', { type: 'success', message: '退出成功' })
+        })
+      },
+
+      async logout() {
+        if (this.isSDKReady) {
+          await this.exitRoom()
+          await this._logout()
+          // window.location.reload()
+        }
+      },
+
       // 没有昵称或者昵称为''或者""的，都用 userID 展示
       canIUseNick(nick) {
         if (nick && nick !== '""' && nick !== '\'\'') {
@@ -205,10 +237,14 @@
     background #2B2C2F
     height 60px
     line-height 60px
-    z-index 9999
+    /*z-index 9999*/
     box-shadow 0 2px 2px 0 rgba(0, 0, 0, 0.35)
     margin-bottom 50px
   }
+ .direct-two {
+     background #ffffff
+     box-shadow none
+ }
 
   .direct-security {
     margin 0 auto
@@ -328,6 +364,11 @@
   }
   .copy-img {
     padding 30px 25px 25px 0
+  }
+
+  ._rel{
+    margin-top 10px
+    margin-right 30px
   }
   @media screen and (min-width: 900px) and (max-width: 1500px) {
     .direct-security {

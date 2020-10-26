@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import QRCode from 'qrcode'
   export default {
     props:['url'],
     data() {
@@ -14,7 +15,7 @@
     },
     methods: {
       generateQR(text) {
-        return this.qrcode.toDataURL(text)
+        return QRCode.toDataURL(text)
       }
     },
     created() {

@@ -1,7 +1,7 @@
 <template>
   <div class="container-mobile">
     <div class="container-mobile">
-      <img class="quit-btn" @click="open" src="../../assets/image/quit.png"/>
+      <img class="quit-btn" @click="open" src="../../assets/image/back-img.png"/>
       <div class="login-container" v-if="showLogin" >
         <Login/>
       </div>
@@ -41,16 +41,18 @@
     },
 
     destroyed() {
-      this.logout()
+      this.$store.commit('reset')
+      this.exitRoom()
+      // this.logout()
     },
     methods: {
       open() {
-        this.$confirm('确认要退出吗？退出之后不能再参与直播互动了哦~', '提示', {
+        this.$confirm('确认要退出吗？退出之后不能再观看直播了哦~', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.logout()
+          this.$router.replace('/')
         }).catch(() => {
           this.$store.commit('showMessage', {
             message: '已取消退出',
@@ -62,6 +64,8 @@
       exitRoom() {
         this.im.exitRoom(this.chatInfo.groupId).then(() => {
 
+          }).catch(() => {
+
         })
       },
       login() {
@@ -71,15 +75,18 @@
       _logout() {
         this.im.logout().then(() => {
           this.$store.commit('toggleIsSDKReady', false)
+          console.log('观众退出直播间', this.chatInfo.groupId)
           this.$store.commit('showMessage', { type: 'success', message: '退出成功' })
         })
       },
       async logout() {
-        if (this.isSDKReady) {
-          await this.exitRoom()
-          await this._logout()
+        if (!this.isSDKReady && !this.isMobile) {
+          this.$router.replace('/')
+          return
         }
-        window.location.reload()
+        await this.exitRoom()
+        await this._logout()
+       // window.location.reload()
       }
     }
   }
@@ -87,17 +94,22 @@
 
 <style scoped lang="stylus">
   .container-mobile {
+    position absolute
+    top 0
+    bottom 0
+    right 0
+    left 0
     width 100%
     height 100vh
     margin 0 auto
+    z-index 1
     overflow hidden
-
     .video-box {
       width 100%
       height 100%
       position relative
       overflow hidden
-      background #09090c //rgba(0,0,0,0.8)
+      //background #09090c //rgba(0,0,0,0.8)
     }
 
     .quit-btn {
@@ -111,13 +123,15 @@
     }
 
     .chat-mobile {
-      position absolute
+      position fixed
       /*height 210px*/
       width 100%
       bottom 55px
       display flex
       justify-content center
-
+      /deep/ .send-box {
+        width: calc(100% - 70px);
+      }
       .summary-text {
         padding 5px 20px
         line-height 25px

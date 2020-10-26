@@ -1,72 +1,74 @@
 <template>
   <div class="pusher-Mobile">
     <div id="video-container" class="video-container"></div>
+    <pusher-setting v-show="show_creat && isPush"></pusher-setting>
+    <div class="disabled-box" v-show="show_creat && isPush" @click="disabledHandler"></div>
     <div class="ready-go">
       <transition
-          name="custom-classes-transition"
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
+              name="custom-classes-transition"
+              enter-active-class="animated fadeIn"
+              leave-active-class="animated fadeOut"
       >
         <span class="ready-box" v-if="ready">Ready!</span>
         <span class="ready-box" v-if="go">Go!</span>
       </transition>
     </div>
-    <div class="start-btn" @click="startPush" v-show="isPush">开始推流</div>
-    <div class="room-time">
-      <div>
-        <img class="room-img" src="../../assets/image/room-mobile.png"><span
-          class="room-text">ID-{{chatInfo.groupId}}</span>
+    <div>
+      <div class="start-btn" v-show="show_creat && isPush" @click="creatLiveRoom">开始直播</div>
+      <div class="room-time" v-if="!isPush">
+        <div>
+          <img class="room-img" :src="userInfo.avatar" @error="imgError(userInfo)"/>
+          <span class="room-text">{{title}}</span>
+        </div>
+<!--        <div style="width: 93px">-->
+<!--          <img class="time-img" v-if="isPush" src="../../assets/image/time-mobile.png">-->
+<!--          <img class="time-img" v-else src="../../assets/image/pushing.png">-->
+<!--          <span class="room-text">{{pusherTime}}</span>-->
+<!--        </div>-->
       </div>
-      <div style="width: 93px">
-        <img class="time-img" v-if="isPush" src="../../assets/image/time-mobile.png">
-        <img class="time-img" v-else src="../../assets/image/pushing.png">
-        <span class="room-text">{{pusherTime}}</span>
+      <div class="pusher-bar">
+        <img class="pusher-icon cursor"  @click="playHandler" src="../../assets/image/live-share.png">
+        <img class="pusher-icon cursor" @click="show_more =!show_more" src="../../assets/image/pusher-more.png">
+        <div>
+          <img class="pusher-icon cursor" v-if="isPush"   @click="startPush" src="../../assets/image/pusher-start.png">
+          <img class="pusher-icon cursor" v-else @click="openConfirm"  src="../../assets/image/pusher-stop.png">
+        </div>
       </div>
-    </div>
-    <div class="setting-bar" v-show="!isPush">
-      <div class="video-bar">
-        <div>
-          <!--                    打开麦克风-->
-          <p class="setting-icon cursor" v-if="isMute" @click="startMicrophone">
-            <img src="../../assets/image/close-mcp.png">
-          </p>
-          <p class="setting-icon cursor" v-else @click="stopMicrophone">
-            <img src="../../assets/image/open-microphone.png">
-          </p>
-        </div>
 
-        <div>
-          <p class="setting-icon cursor" v-if="isStartCamera" @click="startCamera">
-            <img src="../../assets/image/close-camera.png">
-          </p>
-          <p class="setting-icon cursor" v-else @click="stopCamera">
-            <img src="../../assets/image/open-camera.png">
-          </p>
-        </div>
 
-        <div>
-          <p class="setting-icon cursor" v-if="isPush" @click="startPush">
-            <img src="../../assets/image/webrtc_push.png">
-          </p>
-          <p class="setting-icon cursor" v-else @click="openConfirm">
-            <img src="../../assets/image/webrtc_pusher_stop.png">
-          </p>
-        </div>
-        <div >
-            <p class="player-icon cursor" @click="playHandler">
-                <img style="width: 25px;padding: 5px"  src="../../assets/image/qr-code.png">
+      <div class="setting-bar">
+        <div class="video-bar" v-show="show_more">
+          <div>
+            <!--                    打开麦克风-->
+            <p class="setting-icon cursor" v-if="isMute" @click="startMicrophone">
+              <img src="../../assets/image/close-mic.png">
             </p>
+            <p class="setting-icon cursor" v-else @click="stopMicrophone">
+              <img src="../../assets/image/open-mic.png">
+            </p>
+          </div>
 
+          <div>
+            <p class="setting-icon cursor" v-if="isStartCamera" @click="startCamera">
+              <img src="../../assets/image/close-camera.png">
+            </p>
+            <p class="setting-icon cursor" v-else @click="stopCamera">
+              <img src="../../assets/image/open-camera.png">
+            </p>
+          </div>
         </div>
       </div>
+      <el-dialog
+              title="微信扫码观看"
+              :visible.sync="isShow_playUrl"
+              width="30%"
+              center>
+        <QRCode class="mobile-Live" :url="playUrl.cdnUrl"/>
+      </el-dialog>
     </div>
-    <el-dialog
-            title="微信扫码观看"
-            :visible.sync="isShow_playUrl"
-            width="30%"
-            center>
-      <QRCode class="mobile-Live" :url="playUrl.cdnUrl"/>
-    </el-dialog>
+    <div v-if="isTest">
+      <CapabilityTest :isTest="isTest"></CapabilityTest>
+    </div>
   </div>
 
 </template>
@@ -74,18 +76,30 @@
 <script>
   import { mixinPusher } from './pusher.js'
   import QRCode from '../qrcode'
+  import pusherSetting from './components/pusherSetting'
+  import CapabilityTest from '../test/test'
+
   export default {
     mixins:[mixinPusher],
     name: 'pusher',
     components: {
-      QRCode
+      QRCode,
+      pusherSetting,
+      CapabilityTest
     },
     data() {
       return {
+        isTest:false,
         ready: false,
         go: false,
+        show_more:false
       }
     },
+    methods: {
+      disabledHandler() {
+        this.$store.commit('showMessage', { message: '请先创建直播间哦~', type: 'warning' })
+      }
+    }
   }
 </script>
 
@@ -102,23 +116,29 @@
     color: #2d8cf0
   }
   .setting-icon {
-    width 50px
     display flex
     flex-direction column
     justify-content center
     align-items center
   }
-  .player-icon {
+  .pusher-icon {
+    display block
     width: 35px;
     height: 35px;
     margin-left 10px
-    border-radius: 50%;
-    background: #fff;
+    /*border-radius: 50%;*/
   }
   .pusher-Mobile {
     position relative
     height 100%
-
+  .disabled-box {
+    position fixed
+    height 50px
+    bottom 0
+    left 0
+    right 100px
+    z-index 223
+  }
     .video-container {
       position relative
       height 100%
@@ -126,7 +146,9 @@
       flex-direction column
       justify-content center
       align-items center
-
+      & div{
+        background-color rgba(0,0,0,0) !important
+      }
       .stop-camera {
         position absolute
         top 0
@@ -215,15 +237,16 @@
       top 10px
       display flex
       justify-content space-between
-
       & div {
-        padding 2px 5px
-        border-radius 18px
-        background rgba(0, 0, 0, 0.38)
+        padding 4px
+        border-radius 25px
+        background rgba(0, 0, 0, 0.6)
       }
 
       .room-img {
-        height 21px
+        height 36px
+        width 36px
+        border-radius 50%
         margin-right 5px
       }
 
@@ -237,7 +260,7 @@
         color #ffffff
         line-height 28px
         vertical-align middle
-        margin-right 3px
+        margin-right 8px
       }
 
     }
@@ -252,7 +275,7 @@
       padding 15px 30px
       border-radius 30px
       font-weight 500
-      background-color #f5a623
+      background-color #2864F0
       text-align center
       font-size 16px
       color #ffffff
@@ -260,6 +283,17 @@
       z-index 222
     }
 
+    .pusher-bar {
+      position fixed
+      margin auto
+      right 10px
+      width 140px
+      bottom 10px
+      z-index 222
+      display flex
+      //background-color rgba(0,0,0,0.55)
+
+    }
     .setting-bar {
       position: absolute;
       //width: $width;
@@ -269,17 +303,20 @@
       right 0
 
       .video-bar {
+        width 42px
+        height 105px
+        background-color rgba(0,0,0,0.4)
         position fixed
-        right 10px
-        bottom 100px
+        right 57px
+        bottom 55px
         justify-content center
         transition: all .5s
         z-index 2000
         display inline-flex
         flex-direction column
-
+        border-radius 6px
         & img {
-          width 35px
+          width 32px
           /*height 42px*/
           margin-bottom 7px
         }
@@ -388,7 +425,7 @@
 
   /*input     */
   .el-input /deep/ {
-    width 60%
+    width 80%
     /*border-radius 50%*/
     border-bottom 2px solid #2d8cf0
     outline none
@@ -406,10 +443,15 @@
     border-radius 0px
   }
 
-  .el-divider--horizontal {
-    margin 6px auto 0
+  /deep/ .el-divider--vertical {
+    margin 0
     width 90%
   }
+  /deep/ .el-divider {
+    background-color rgba(255,255,255,0.2)
+
+  }
+
 
 
 </style>

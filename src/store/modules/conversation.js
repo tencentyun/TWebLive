@@ -1,19 +1,53 @@
-// import { SDKAPPID } from '../../../public/debug/GenerateTestUserSig'
+// JSON.parse(localStorage.getItem('userInfo')) ||
 const SDKAPPID = window.genTestUserSig('').SDKAppID
+let defaultGroupId = ''
+let defaultTitle = ''
+let defaultUserInfo = {
+  userId:'',
+  userSig:''
+}
+try {
+  if (localStorage.groupId) {
+    defaultGroupId = localStorage.groupId
+  }
+} catch (e) {
+  console.log(e)
+}
+try {
+  if (localStorage.title) {
+    defaultTitle = localStorage.title
+  }
+} catch (e) {
+  console.log(e)
+}
+try {
+  if (localStorage.userInfo || localStorage.userSig) {
+    defaultUserInfo.userId = localStorage.userId,
+    defaultUserInfo.userSig = localStorage.userSig
+
+  }
+} catch (e) {
+  console.log(e)
+}
+
 const conversationModules = {
   state: {
     currentMessageList: [],
     currentLiveTips: [],
+    liveDomain:'',
     playType: 'WebRTC',   //默认webRTC 播放，cdn
     showLogin: false, //是否展示登录
+    fullPath:'',
     pushInfo:{
       playUrl:'',
-      isPushing:false
+      isPushing:false,
+      title: defaultTitle,
+      resolution:'720p'
     },
     chatInfo: {
-      groupId: '',
-      userId: '',
-      userSig: '',
+      groupId: defaultGroupId,
+      userId: defaultUserInfo.userId,
+      userSig: defaultUserInfo.userSig,
       sdkAppID: SDKAPPID,
       streamId: '',
       role: '',
@@ -26,14 +60,34 @@ const conversationModules = {
     setRole(state, data) {
       state.chatInfo.role = data
     },
+    setLiveDomain(state, data) {
+      state.liveDomain = data
+    },
     setPlayInfo(state, data) {
       state.pushInfo.playUrl = data
     },
     setIsPushing(state, data) {
       state.pushInfo.isPushing = data
     },
+    setPusherInfo(state, data) {
+      state.pushInfo.title = data.title
+      state.pushInfo.resolution = data.resolution
+      try {
+        localStorage.title = data.title
+      } catch (e) {
+        console.log(e)
+      }
+    },
     setGroupId(state, data) {
       state.chatInfo.groupId = data
+
+      try {
+        localStorage.groupId = data
+      } catch (e) {
+        console.log(e)
+      }
+      // localStorage.setItem('userInfo', JSON.stringify(data))
+      // 之后才是修改state中的状态
     },
     setPlayType(state, data) {
       state.playType = data
@@ -42,11 +96,18 @@ const conversationModules = {
       state.showLogin = data
     },
     setChatInfo(state, data) {
-      state.chatInfo.groupId = data.roomID
+      // state.chatInfo.groupId = data.roomID
+
       state.chatInfo.userId = data.userID
       state.chatInfo.userSig = data.userSig
-      state.chatInfo.role = data.role
       state.chatInfo.resolution = data.resolution
+      try {
+        localStorage.userId = data.userID
+        localStorage.userSig = data.userSig
+
+      } catch (e) {
+        console.log(e)
+      }
     },
     showLike(state, data) {
       state.likeCount += data

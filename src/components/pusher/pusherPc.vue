@@ -8,11 +8,11 @@
       </div>
       <div>
         <div class="pusher-start cursor" v-if="isPush" @click="startPush">
-          <img class="pusher-icon" src="../../assets/image/pusher-start.png">
+          <img class="pusher-icon" src="../../assets/image/web-pusher-start.png">
           <span class="play-text">开始直播</span>
         </div>
         <div class="pusher-start cursor" v-else @click="openConfirm">
-          <img class="pusher-icon" src="../../assets/image/pusher-stop.png">
+          <img class="pusher-icon" src="../../assets/image/web-pusher-stop.png">
           <span class="play-text">结束直播</span>
         </div>
       </div>
@@ -51,19 +51,27 @@
         </div>
 
       </div>
-
-      <div>
-
-      </div>
+    </div>
+    <div v-if="isTest">
+      <CapabilityTest :isTest="isTest"></CapabilityTest>
     </div>
   </div>
 </template>
 
 <script>
   import { mixinPusher } from './pusher.js'
+  import CapabilityTest from '../test/test'
   export default {
     mixins:[mixinPusher],
     name: 'pusher',
+    components: {
+      CapabilityTest
+    },
+    data() {
+      return {
+        isTest:false,
+      }
+    },
   }
 </script>
 

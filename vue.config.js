@@ -7,10 +7,22 @@ module.exports = {
   publicPath: './',
   assetsDir: './',
   productionSourceMap: false,
+  devServer:{
+    https:true
+  },
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))
       .set('tim', resolve('src/tim.js'))
+    // 删除预加载
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+    // 压缩代码
+    config.optimization.minimize(true)
+    // 分割代码
+    config.optimization.splitChunks({
+      chunks: 'all'
+    })
   },
   css: {
     loaderOptions: {

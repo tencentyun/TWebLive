@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div class="container-pusher">
         <IndexMobile v-if="isMobile"></IndexMobile>
         <IndexPc v-else></IndexPc>
     </div>
@@ -25,6 +25,20 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
+    .container-pusher {
+        position absolute
+        top 0
+        bottom 0
+        left 0
+        right 0
+        width 100%
+        height 100%
+        z-index 33
+        background url("../../assets/image/mobile-bg.png") no-repeat center
+        background-size cover
+        background-color rgb(113 109 109,1)
+
+    }
 
 </style>
