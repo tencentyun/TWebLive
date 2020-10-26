@@ -113,7 +113,7 @@ im.enterRoom('your roomID').then((imResponse) => {
 
 ## 运行体验
 
-- [在线 Demo](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/index.html)
+- [在线 Demo](https://trtc.qcloud.com/tweblive/index.html)
 - [本地一分钟跑通体验](https://cloud.tencent.com/document/product/269/47959)
 
 ## 接入使用

@@ -2,33 +2,31 @@
   <div class="player">
     <div id="player-container" class="player-container">
     </div>
-    <div class="video-bar" v-if="playType !== 'cdn'">
-      <div>
-        <p class="setting-icon cursor" v-if="!isMute" @click="pauseAudio">
-          <img src="../../assets/image/open-microphone.png">
-        </p>
-        <p class="setting-icon cursor" v-else @click="resumeAudio">
-          <img src="../../assets/image/mute.png">
-        </p>
-      </div>
-
-      <div>
-        <p class="setting-icon cursor player-icon" v-if="!isPlay" @click="resumeVideo">
-          <img src="../../assets/image/player.png">
-        </p>
-        <p class="setting-icon cursor pause-icon" v-else @click="pauseVideo">
-          <img style="height: 20px;width: 20px" src="../../assets/image/stop-player.png">
-        </p>
-      </div>
+    <div class="video-bar">
+      <img class="player-icon cursor"  @click="shareHandler" src="../../assets/image/live-share.png">
     </div>
+    <div v-if="live_title" class="player-title">
+      <span class="title-text">{{live_title}}</span>
+    </div>
+    <el-dialog
+            title="微信扫码观看"
+            :visible.sync="isShow_playUrl"
+            width="30%"
+            center>
+      <QRCode class="mobile-Live" :url="share_url"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import { mixinPlayer } from './player.js'
+  import QRCode from '../qrcode'
   export default {
     mixins:[mixinPlayer],
     name: 'player',
+    components:{
+      QRCode
+    }
   }
 </script>
 
@@ -36,9 +34,19 @@
   .cursor {
     cursor: pointer;
   }
-  /deep/ .vcp-controls-panel {
-    bottom 80px
+  .player-title {
+    position: fixed;
+    margin: auto;
+    left: 10px;
+    top: 10px;
+    padding: 8px 15px
+    border-radius: 25px;
+    background: rgba(0,0,0,0.6);
+    .title-text {
+      color #ffffff
+    }
   }
+
   .progress-box {
     background #6a6a6a
     /*display flex*/
@@ -82,8 +90,6 @@
   .player {
     position relative
     height 100%
-    background url("../../assets/image/video-bg.png") no-repeat center //#8a808005
-    background-size 100%
     /*background-color */
     /*padding-top 30px*/
 
@@ -145,17 +151,16 @@
 
     .video-bar {
       position fixed
-      right 20px
-      bottom 120px
+      right 62px
+      bottom 10px
       display flex
       flex-direction column
       justify-content space-around
       transition: all .5s
       z-index 999
-
       & img {
-        width 40px
-        height 40px
+        width 34px
+        height 34px
         display block
         /*height 42px*/
       }
@@ -198,12 +203,9 @@
     align-items: center;
   }
 
-  .player-icon, .pause-icon {
+  .player-icon {
     width 40px
     height 40px
-    border-radius 50%
-    background #ffffff
-
   }
 
   //手机二维码
@@ -230,7 +232,6 @@
     /*width 60px*/
     /*height 60px*/
   }
-
   /deep/ .el-dialog--center .el-dialog__body {
     padding: 0px 25px 25px;
   }
@@ -240,17 +241,28 @@
     display none
   }
   /deep/  .vcp-playtoggle {
-    width 60px
-    background:url("../../assets/image/small-start.png") no-repeat center
-    position fixed
-    right 0
-    top 0
-    bottom 0
-    left 0
-    margin auto
+    /*width 32px*/
+    /*height 32px*/
+    /*background:url("../../assets/image/pusher-start.png") no-repeat center*/
+    /*background-size 100% 100%*/
+    /*position fixed*/
+    /*right 65px*/
+    /*bottom 63px*/
+    /*z-index 999*/
+    // width: 60px;
+    // position: fixed;
+    // background:url("../../assets/image/pusher-start.png") no-repeat center
+    //right: 0;
+   // top: 0;
+    //bottom: 0;
+    //left: 0;
+   // margin: auto;
   }
   /deep/ .vcp-playtoggle {
-
+    background:url("../../assets/image/mobile-player.png") no-repeat center
+    background-size 100% 100%
+    width 36px
+    height 36px
   }
   /deep/ .vcp-fullscreen-toggle {
 
@@ -267,6 +279,18 @@
     height 100%
     object-fit cover
   }
+  /deep/ .vcp-controls-panel {
+    position fixed
+    /*bottom 80px*/
+    right 0
+    top 0
+    bottom 0
+    left 0
+    margin auto
+    width 40px
+    height 40px
+    /*height 400px*/
+  }
 
   /deep/ .vcp-player {
     width 100%
@@ -275,6 +299,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(0,0,0,0)
   }
 
   /deep/ .vcp-bigplay {

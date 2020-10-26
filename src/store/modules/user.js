@@ -3,7 +3,7 @@ import defaultImg from '../../assets/image/default.png'
 const user = {
   state: {
     currentUserProfile: {},
-    isLogin: false,
+    isLogin: false,    // 是否在登录状态   目前是token为主
     isSDKReady: false, // TIM SDK 是否 ready
     userID: 0,
     userSig: '',
@@ -25,13 +25,13 @@ const user = {
     toggleIsSDKReady(state, isSDKReady) {
       state.isSDKReady = typeof isSDKReady === 'undefined' ? !state.isSDKReady : isSDKReady
     },
-    reset(state) {
-      Object.assign(state, {
-        currentUserProfile: {},
-        isLogin: false,   // 是否显示登录
-        isSDKReady: false // TIM SDK 是否 ready
-      })
-    },
+    // reset(state) {
+    //   Object.assign(state, {
+    //     currentUserProfile: {},
+    //     isLogin: false,   // 是否显示登录
+    //     isSDKReady: false // TIM SDK 是否 ready
+    //   })
+    // },
     GET_USER_INFO(state, payload) {
       state.userID = payload.userID
       state.userSig = payload.userSig

@@ -73,9 +73,9 @@
             </div>
         </div>
         <div class="tab-summary" v-show="this.tabSelected ===1">
-            <p class="summary-text">TWebLive 集成了腾讯云实时音视频 TRTC、腾讯云即时通信 TIM 、腾讯云超级播放器 TCPlayer ，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 API 。您可以通过接入 TWebLive 快速实现 Web 端推流、拉流以及实时聊天互动功能。</p>
+            <p class="summary-text">TWebLive 集成了腾讯云实时音视频 TRTC、腾讯云即时通信 IM 、腾讯云超级播放器 TCPlayer ，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 API 。您可以通过接入 TWebLive 快速实现 Web 端推流、拉流以及实时聊天互动功能。</p>
             <p class="summary-text">欢迎在github提issue哦~</p>
-            <p class="summary-text" style="font-size: 15px">github: https://github.com/tencentyun/TWebLive</p>
+            <p class="github-text" style="font-size: 15px;cursor: pointer" @click="githubHandler">https://github.com/tencentyun/TWebLive</p>
         </div>
     </div>
 </template>
@@ -135,11 +135,16 @@
 
     }
 
-    .summary-text {
+    .summary-text, .github-text {
         padding 5px 15px
         line-height 25px
         text-align left
         color #ffffff
+    }
+    .github-text:hover{
+        145
+        color #409eff
+        146
     }
 
     #message-send-box-wrapper {

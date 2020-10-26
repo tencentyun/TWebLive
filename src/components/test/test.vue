@@ -7,7 +7,7 @@
           <use xlink:href="#icon-shebei"></use>
         </svg>
       </div>
-      设备检测
+<!--      设备检测-->
     </div>
     <!-- 设备检测界面弹窗 -->
 
@@ -1113,6 +1113,7 @@
     margin-top: -14px;
     opacity: 0.8;
     margin-bottom: 8px;
+    display: none;
   }
 
   .device-connect-list {

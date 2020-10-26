@@ -1,7 +1,7 @@
 <template>
   <div class="pusher-container">
     <div class="live-pc">
-      <Header @logout="logout"/>
+      <Header/>
       <div class="container-pc">
         <div class="pusher-box">
           <Pusher/>
@@ -20,6 +20,7 @@
   import NewChat from '../../components/chatroom/chat-pc'
   import Header from '../../components/header/header'
   import Pusher from '../../components/pusher/pusherPc'
+  import axios from 'axios'
 
   export default {
     title: 'im',
@@ -45,7 +46,9 @@
       }),
     },
     destroyed() {
-      this.logout()
+      this.$store.commit('reset')
+     // this.exitRoom()
+      //this.logout()
     },
 
     methods: {
@@ -58,11 +61,11 @@
         this.im.logout().then(() => {
           this.$store.commit('toggleIsSDKReady', false)
           this.$store.commit('toggleIsLogin', false)
+          this.$route.push('/')
           // this.$store.commit('reset')
           this.$store.commit('showMessage', { type: 'success', message: '退出成功' })
         })
       },
-
       async logout() {
         if (this.isSDKReady) {
           await this.exitRoom()
@@ -80,7 +83,7 @@
   }
 
   .pusher-container {
-    z-index 999
+    z-index 1
     background #2B2C2F;
     width 100%
     height 100%
@@ -88,7 +91,7 @@
     top 0
     left 0
     right 0
-    left 0
+    bottom  0
     display flex
     margin auto
     justify-content center

@@ -122,8 +122,9 @@ el-button--primary:focus, .el-button--primary:hover {
     border-color: #1162F9;
 }
 .el-select-dropdown__item.selected {
-    color: #1162F9;
+    color: #ffffff;
     font-weight: 700;
+    font-family: PingFangSC-Regular;
 }
 .el-input--suffix .el-input__inner{
     padding-left: 70px;
@@ -144,4 +145,30 @@ el-button--primary:focus, .el-button--primary:hover {
 }
 button {
     font-family: PingFangSC-Regular , Microsoft YaHei, Arial, Helvetica, sans-serif, SimSun !important;
+}
+
+ .el-select-dropdown {
+    position: absolute;
+    z-index: 1001;
+    border: none;
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.3);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0);
+    box-sizing: border-box;
+    margin: 5px 0;
+    color: #ffffff;
+}
+.el-select-dropdown__item{
+    color: #ffffff;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+}
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+.el-popper[x-placement^=bottom] .popper__arrow {
+    display: none;
+}
+.v-modal{
+    display: none;
 }

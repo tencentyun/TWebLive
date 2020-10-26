@@ -8,7 +8,6 @@
             </slot>
             <el-divider></el-divider>
             <p class="close-btn" @click="close">我知道了</p>
-
         </div>
 
     </div>
