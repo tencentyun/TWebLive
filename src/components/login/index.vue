@@ -103,49 +103,12 @@
       }),
     },
     created () {
-      this.form.roomID = this.chatInfo.groupId
-      let webLiveSmsLoginInfo = localStorage.getItem(WEB_LIVE_SMS_LOGIN_INFO)
-      webLiveSmsLoginInfo = webLiveSmsLoginInfo ? JSON.parse(webLiveSmsLoginInfo) : {}
-      const { roomID = '', userID = '', token = '',  loginTime = 0, role } = webLiveSmsLoginInfo
-      // token 30天过期 设置29天时重新发送验证码，避免token过期时登录异常
-      if (token && (loginTime + 29 * 24 * 60 * 60 * 1000 > Date.now())) {
-        this.hasToken = true
-        this.form.roomID = roomID
-        this.form.userID = userID
-        this.roomLabel = '房间号'
-        this.form.selecteRole = role
-        // this.login()
-      } else {
-        localStorage.removeItem(WEB_LIVE_SMS_LOGIN_INFO)
-        this.hasToken = false
-        this.roomLabel = ''
-      }
+      // this.form.roomID = this.chatInfo.groupId
     },
     mounted() {
 
     },
     methods: {
-      // WEBLIVE 登录
-      // webLiveLogin () {
-      //   let userID = this.form.userID
-      //   let userSig = window.genTestUserSig(this.form.userID).userSig
-      //   this.loading = false
-      //   this.$store.commit('toggleIsLogin', true)
-      //   this.$store.commit('setRole', this.form.selecteRole)
-      //   let _webLiveSmsLoginInfo = {
-      //     loginTime: Date.now(),
-      //     roomID: this.form.roomID,
-      //     userSig:userSig,
-      //     userID: userID,
-      //     role: this.form.selecteRole,
-      //     resolution: this.form.resolution
-      //   }
-      //   localStorage.setItem(WEB_LIVE_SMS_LOGIN_INFO, JSON.stringify(_webLiveSmsLoginInfo))
-      //   let _LoginInfo = localStorage.getItem(WEB_LIVE_SMS_LOGIN_INFO)
-      //   const LoginInfo = JSON.parse(_LoginInfo)
-      //   this.$store.commit('setChatInfo', LoginInfo)
-      //   this.$store.commit('showMessage', { message: '登录成功', type: 'success' })
-      // },
       closeLogin() {
         this.$store.commit('showLogin', false)
       },
@@ -155,21 +118,14 @@
         let userSig = window.genTestUserSig(this.form.userID).userSig
         this.$store.commit('toggleIsLogin', true)
         this.$store.commit('showLogin', false)
-        let webLiveSmsLoginInfo = localStorage.getItem(WEB_LIVE_SMS_LOGIN_INFO)
-        const { token, phone } = JSON.parse(webLiveSmsLoginInfo)
         let _webLiveSmsLoginInfo = {
           loginTime: Date.now(),
-          token: token,
-          phone: phone,
           roomID: this.form.roomID,
           userID: userID,
           userSig: userSig,
           resolution: this.form.resolution
         }
-        localStorage.setItem(WEB_LIVE_SMS_LOGIN_INFO, JSON.stringify(_webLiveSmsLoginInfo))
-        let _LoginInfo = localStorage.getItem(WEB_LIVE_SMS_LOGIN_INFO)
-        const LoginInfo = JSON.parse(_LoginInfo)
-        this.$store.commit('setChatInfo', LoginInfo)
+        this.$store.commit('setChatInfo', _webLiveSmsLoginInfo)
         this.$store.commit('showMessage', { message: '已登录成功，可以创建直播哦~', type: 'success' })
 
 
