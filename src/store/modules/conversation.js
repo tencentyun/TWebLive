@@ -1,5 +1,6 @@
 // JSON.parse(localStorage.getItem('userInfo')) ||
 const SDKAPPID = window.genTestUserSig('').SDKAppID
+const pushDomain = window.genTestUserSig('').pushDomain
 let defaultGroupId = ''
 let defaultTitle = ''
 let defaultUserInfo = {
@@ -49,6 +50,7 @@ const conversationModules = {
       userId: defaultUserInfo.userId,
       userSig: defaultUserInfo.userSig,
       sdkAppID: SDKAPPID,
+      liveDomainName: pushDomain,
       streamId: '',
       role: '',
       resolution: ''
