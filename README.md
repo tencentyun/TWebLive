@@ -1,28 +1,16 @@
 ## 简介
-[TWebLive](https://www.npmjs.com/package/tweblive)，腾讯云 Web 直播互动组件，是腾讯云终端研发团队推出的一个新的 SDK，集成了[腾讯云实时音视频 TRTC](https://cloud.tencent.com/product/trtc/)、[腾讯云即时通信 TIM](https://cloud.tencent.com/product/im)、[腾讯云超级播放器 TCPlayer](https://cloud.tencent.com/document/product/454/7503)，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 API，接入后可快速实现 Web 端推流、拉流以及实时聊天互动功能。
+[TWebLive](https://www.npmjs.com/package/tweblive)，腾讯云 Web 直播互动组件，是腾讯云终端研发团队推出的一个新的 SDK，集成了[腾讯云实时音视频 TRTC](https://cloud.tencent.com/product/trtc/)、[腾讯云即时通信 TIM](https://cloud.tencent.com/product/im)、[腾讯云超级播放器 TCPlayer](https://cloud.tencent.com/document/product/454/7503)，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 [API](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)，接入后可快速实现 Web 端推流、拉流以及实时聊天互动功能。
 
 ## 效果展示
 
 ![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/demo.gif)
 
-## 运行体验
+## 架构设计
 
-- [在线 Demo](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/index.html)
-- [本地一分钟跑通体验](https://cloud.tencent.com/document/product/269/47959)
-
-## 架构和 API 设计
-其架构和 API 设计如下：
-
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/tweblive.png)
-
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/pusher.png)
-
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/player.png)
-
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/im.png)
+![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/demo-framework.png)
 
 ## TWebLive 的优点
-开发者接入此 SDK，可**彻底替代 flash 推流方案**，**大大降低** Web 推流、Web 低延时观看、CDN 观看以及实时聊天互动的**实现复杂度和时间成本**。
+开发者接入此 SDK，可**彻底替代 flash 推流方案**，**大大降低** Web 推流、Web 低延时观看、CDN 观看以及实时聊天互动（或弹幕）的**实现复杂度和时间成本**，举例说明：
 1. 当需要推流时，创建 Pusher（推流）对象，最简单的推流仅需3步。
 
 ```javascript
@@ -74,7 +62,7 @@ player.startPlay(url).then(() => {
 </script>
 ```
 
-3. 当需要跟其他人聊天互动时，创建 IM（即时通信）对象，最简单的消息收发仅需3步。
+3. 当主播和观众需要聊天互动时，创建 IM（即时通信）对象，最简单的消息收发仅需3步。
 ```javascript
 // 1、创建 IM（即时通信）对象并监听事件
 let im = TWebLive.createIM({
@@ -123,6 +111,11 @@ im.enterRoom('your roomID').then((imResponse) => {
 
 为了进一步降低开发者的开发和人力成本，我们在 TWebLive SDK 的基础上，提供了同时适配 PC 和移动端浏览器的 [Demo](https://github.com/tencentyun/TWebLive)，并开源到了 github。开发者 fork&clone 项目到本地（顺手来个star，谢谢~），稍作修改即可把 Demo 跑起来，或者集成到自己的项目部署上线。
 
+## 运行体验
+
+- [在线 Demo](https://trtc.qcloud.com/tweblive/index.html)
+- [本地一分钟跑通体验](https://cloud.tencent.com/document/product/269/47959)
+
 ## 接入使用
 接入前，您需要：
 - 在 [腾讯云实时音视频 TRTC 控制台](https://console.cloud.tencent.com/trtc/app) 中创建一个实时音视频应用（*此时会自动创建一个 `SDKAppID` 相同的 IM 应用*），取得 `SDKAPPID`。然后应用管理 -> 功能配置 -> 开启自动旁路推流。开启旁路推流功能后， TRTC 房间里的每一路画面都配备一路对应的播放地址（*如果不需要 CDN 直播观看，可略过开启旁路推流的步骤*）。
@@ -147,7 +140,7 @@ Web 推流和 Web 低延时观看用到了 WebRTC 技术。目前主要在桌面
 | iOS | 微信内嵌网页| 12.1.4 | 支持 | 不支持 | 不支持 |
 | Android | 移动版 QQ 浏览器| - | 不支持 | 不支持 | 不支持 |
 | Android | 移动版 UC 浏览器| - | 不支持 | 不支持 | 不支持 |
-| Android | 微信内嵌网页| - | 不支持 | 不支持 | 不支持 |
+| Android | 微信内嵌网页（TBS内核）| - | 支持 | 支持 | 不支持 |
 
 在移动端推荐使用 [小程序](https://cloud.tencent.com/document/product/647/17018) 解决方案，微信和手机 QQ 小程序均已支持，都是由各平台的 Native 技术实现，音视频性能更好，且针对主流手机品牌进行了定向适配。如果您的应用场景主要为教育场景，那么教师端推荐使用稳定性更好的 [Electron](https://cloud.tencent.com/document/product/647/38549) 解决方案，支持大小双路画面，更灵活的屏幕分享方案以及更强大的弱网络恢复能力。
 
