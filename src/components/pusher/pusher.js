@@ -147,7 +147,7 @@ export const mixinPusher = {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-         this.destroyLive()
+         // this.destroyLive()
          this.$router.replace('/')
       }).catch(() => {
         this.$store.commit('showMessage', {
