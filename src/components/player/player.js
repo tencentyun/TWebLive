@@ -59,16 +59,20 @@ export const mixinPlayer = {
       let query = this.$route.query
       if (query.type === 'cdn') {
         let roomId  = query.roomid
-        // let flv = query.flv
         if (roomId) {
            this.$store.commit('setGroupId', roomId)
          }
       }
       let anchorId = this.$route.query.anchorId
+      let playUrl = this.$route.query.playUrl
       this.live_title = this.$route.query.title
       let streamID = `${this.chatInfo.sdkAppID}_${this.chatInfo.groupId}_${anchorId}_main`
-      this.cdnPlayUrl.flv = `https://3891.liveplay.myqcloud.com/live/${streamID}.flv`
-      this.cdnPlayUrl.hls = `https://3891.liveplay.myqcloud.com/live/${streamID}.m3u8`
+      this.cdnPlayUrl.flv = `https://${this.chatInfo.liveDomainName}/live/${streamID}.flv`
+      this.cdnPlayUrl.hls = `https://${this.chatInfo.liveDomainName}/live/${streamID}.m3u8`
+      if (playUrl) {
+        this.cdnPlayUrl.flv = `${playUrl}.flv`
+        this.cdnPlayUrl.hls = `${playUrl}.m3u8`
+      }
       let play_url = `${share_Url}?type=cdn&anchorId=${anchorId}&roomid=${this.chatInfo.groupId}&title=${this.live_title}`
       this.share_url = play_url
       this.$store.commit('setPlayInfo', play_url)

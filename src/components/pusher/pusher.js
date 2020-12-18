@@ -147,8 +147,8 @@ export const mixinPusher = {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // this.destroyLive()
-        this.$router.replace('/')
+         // this.destroyLive()
+         this.$router.replace('/')
       }).catch(() => {
         this.$store.commit('showMessage', {
           message: '已取消关闭',
@@ -238,7 +238,7 @@ export const mixinPusher = {
       let userID = this.chatInfo.userId
       let userSig = this.chatInfo.userSig
       let SDKAppID = this.chatInfo.sdkAppID
-      let liveDomainName = '3891.liveplay.myqcloud.com'
+      let liveDomainName = this.chatInfo.liveDomainName //'3891.liveplay.myqcloud.com' 配置的推流域名
       let streamID = `${SDKAppID}_${this.chatInfo.groupId}_${userID}_main` //sdkappid_roomid_userid_main
       let url = `room://livedomainname=${liveDomainName}&sdkappid=${SDKAppID}&roomid=${this.chatInfo.groupId}&userid=${this.chatInfo.userId}&usersig=${userSig}&streamid=${streamID}`
       this.ready = true

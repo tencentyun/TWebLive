@@ -1,7 +1,7 @@
 /*eslint-disable*/
-
 const _SDKAPPID = 0;
 const _SECRETKEY = '';
+const _PUSHDOMAIN = ''; // 推流域名配置
 /*
  * Module:   GenerateTestUserSig
  *
@@ -47,11 +47,25 @@ function genTestUserSig(userID) {
    * 文档：https://cloud.tencent.com/document/product/647/17275#Server
    */
   var SECRETKEY = _SECRETKEY;
+  /**
+   * 配置播放域名并完成 CNAME，获取步骤如下：
+   * step1. 登录云直播[控制台](https://console.cloud.tencent.com/live/)。
+   * step2. 在左侧导航栏选择【域名管理】，您会看到在您的域名列表新增了一个推流域名，格式为 xxxxx.livepush.myqcloud.com，其中 xxxxx 是一个数字，
+     叫做 bizid，您可以在实时音视频控制台 >【应用管理】>【应用信息】中查找到 bizid 信息。
+   * step3. 单击【添加域名】，输入您已经备案过的播放域名，选择域名类型为【播放域名】，选择加速区域（默认为【中国大陆】），单击【确定】即可。
+   * step4. 域名添加成功后，系统会为您自动分配一个 CNAME 域名（以.liveplay.myqcloud.com为后缀）。CNAME 域名不能直接访问，
+     您需要在域名服务提供商处完成 CNAME 配置，配置生效后，即可享受云直播服务。具体操作请参见 CNAME 配置。
+
+   * 注意：如果不需要 CDN 直播观看，此步骤可略过
+   * 文档：https://cloud.tencent.com/document/product/647/16826
+   */
+  var PUSHDOMAIN = _PUSHDOMAIN;
 
   var generator = new window.LibGenerateTestUserSig(SDKAPPID, SECRETKEY, EXPIRETIME);
   var userSig = generator.genTestUserSig(userID);
   return {
     SDKAppID: SDKAPPID,
-    userSig: userSig
+    userSig: userSig,
+    pushDomain: PUSHDOMAIN
   };
 }
