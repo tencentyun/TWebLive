@@ -1,7 +1,7 @@
 /*eslint-disable*/
-const _SDKAPPID = 1400188366;
-const _SECRETKEY = '217a9b4a174649a8a41ea7166faa8666e0973a3312ef9b20ad1ad52e9bbb5e94';
-const _PUSHDOMAIN = '3891.liveplay.myqcloud.com'; // 推流域名配置
+const _SDKAPPID = 0;
+const _SECRETKEY = '';
+const _PUSHDOMAIN = ''; // 推流域名配置
 /*
  * Module:   GenerateTestUserSig
  *

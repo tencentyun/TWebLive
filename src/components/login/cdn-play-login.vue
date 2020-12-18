@@ -125,25 +125,8 @@
       closeLogin() {
         this.$store.commit('showLogin', false)
       },
-      exitLiveRoom() {
-        this.im.exitRoom(this.chatInfo.groupId).then(() => {})
-      },
-      enterRoom() {
-        this.im.enterRoom(this.chatInfo.groupId).then((imResponse) => {
-          const status = imResponse.data.status
-          if (status === this.TWebLive.TYPES.ENTER_ROOM_SUCCESS || status === this.TWebLive.TYPES.ALREADY_IN_ROOM) {
-            console.log(this.chatInfo.groupId, '观众成功加入直播间')
-
-          }
-        }).catch((imError) => {
-          if (imError.code === 10007 || imError.code === 10015) {
-            this.$store.commit('showMessage', { type: 'warning', message: '进入直播间失败' })
-          }
-        })
-      },
       webLiveLogin() {
         // 匿名用户先退出
-        this.exitLiveRoom()
         let userID = this.form.userID
         let userSig = window.genTestUserSig(this.form.userID).userSig
         this.im.login({
@@ -153,7 +136,6 @@
           this.loading = false
           this.$store.commit('toggleIsLogin', true)
           this.$store.commit('showLogin', false)
-          this.enterRoom()
           let _webLiveSmsLoginInfo = {
             loginTime: Date.now(),
             roomID: this.form.roomID,

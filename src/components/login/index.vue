@@ -26,20 +26,20 @@
                     </div>
                     <!--            <el-input id="userID" v-model="form.userID" type="text" :disabled="true"></el-input>-->
                 </el-form-item>
-                <!--                <el-form-item prop="roomID">-->
-                <!--                    <div class="label-item" :class="{active:isActive.roomID || form.roomID!==''}">-->
-                <!--                        <label class="input-label">房间号:</label>-->
-                <!--                        <el-input id="roomID" v-model.number="form.roomID"-->
-                <!--                                  type='number'-->
-                <!--                                  @focus="isActive.roomID=true"-->
-                <!--                                  @blur="form.roomID===''? isActive.roomID=false:true"-->
-                <!--                                  placeholder=""-->
-                <!--                                  maxLength='18'-->
-                <!--                        >-->
+<!--                <el-form-item prop="roomID">-->
+<!--                    <div class="label-item" :class="{active:isActive.roomID || form.roomID!==''}">-->
+<!--                        <label class="input-label">房间号:</label>-->
+<!--                        <el-input id="roomID" v-model.number="form.roomID"-->
+<!--                                  type='number'-->
+<!--                                  @focus="isActive.roomID=true"-->
+<!--                                  @blur="form.roomID===''? isActive.roomID=false:true"-->
+<!--                                  placeholder=""-->
+<!--                                  maxLength='18'-->
+<!--                        >-->
 
-                <!--                        </el-input>-->
-                <!--                    </div>-->
-                <!--                </el-form-item>-->
+<!--                        </el-input>-->
+<!--                    </div>-->
+<!--                </el-form-item>-->
                 <el-form-item>
                     <el-button class="login-im-btn"  type="primary" @click="webLiveLogin" :loading="loading" >进入房间</el-button>
                 </el-form-item>
