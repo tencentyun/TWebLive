@@ -148,7 +148,7 @@ export const mixinPusher = {
         type: 'warning'
       }).then(() => {
          this.destroyLive()
-       // this.$router.replace('/')
+         this.$router.replace('/')
       }).catch(() => {
         this.$store.commit('showMessage', {
           message: '已取消关闭',

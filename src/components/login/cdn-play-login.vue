@@ -126,7 +126,6 @@
         this.$store.commit('showLogin', false)
       },
       webLiveLogin() {
-        // 匿名用户先退出
         let userID = this.form.userID
         let userSig = window.genTestUserSig(this.form.userID).userSig
         this.im.login({
