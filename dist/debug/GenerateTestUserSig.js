@@ -1,7 +1,7 @@
 /*eslint-disable*/
 const _SDKAPPID = 0;
 const _SECRETKEY = '';
-const _PUSHDOMAIN = ''; // 推流域名配置
+const _PLAYDOMAIN = ''; // 播放域名配置
 /*
  * Module:   GenerateTestUserSig
  *
@@ -59,13 +59,13 @@ function genTestUserSig(userID) {
    * 注意：如果不需要 CDN 直播观看，此步骤可略过
    * 文档：https://cloud.tencent.com/document/product/647/16826
    */
-  var PUSHDOMAIN = _PUSHDOMAIN;
+  var PLAYDOMAIN = _PLAYDOMAIN;
 
   var generator = new window.LibGenerateTestUserSig(SDKAPPID, SECRETKEY, EXPIRETIME);
   var userSig = generator.genTestUserSig(userID);
   return {
     SDKAppID: SDKAPPID,
     userSig: userSig,
-    pushDomain: PUSHDOMAIN
+    playDomain: PLAYDOMAIN
   };
 }
