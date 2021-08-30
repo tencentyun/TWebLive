@@ -113,13 +113,13 @@ im.enterRoom('your roomID').then((imResponse) => {
 
 ## 运行体验
 
-- [在线 Demo](https://trtc.qcloud.com/tweblive/index.html)
+- [在线 Demo](https://web.sdk.qcloud.com/component/tweblive/demo/latest/index.html#/)
 - [本地一分钟跑通体验](https://cloud.tencent.com/document/product/269/47959)
 
 ## 接入使用
 接入前，您需要：
 - 在 [腾讯云实时音视频 TRTC 控制台](https://console.cloud.tencent.com/trtc/app) 中创建一个实时音视频应用（*此时会自动创建一个 `SDKAppID` 相同的 IM 应用*），取得 `SDKAPPID`。然后应用管理 -> 功能配置 -> 开启自动旁路推流。开启旁路推流功能后， TRTC 房间里的每一路画面都配备一路对应的播放地址（*如果不需要 CDN 直播观看，可略过开启旁路推流的步骤*）。
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/2.png)
+![](https://web.sdk.qcloud.com/component/tweblive/assets/doc/2.png)
 - 在 [腾讯云直播控制台](https://console.cloud.tencent.com/live/) 配置播放域名并完成 CNAME 配置，详细操作指引请参见[《CDN 直播观看》](https://cloud.tencent.com/document/product/647/16826)（*如果不需要 CDN 直播观看，此步骤可略过*）。
 - 通过 npm 下载 TWebLive
 ```javascript
