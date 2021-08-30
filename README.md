@@ -1,13 +1,13 @@
 ## 简介
-[TWebLive](https://www.npmjs.com/package/tweblive)，腾讯云 Web 直播互动组件，是腾讯云终端研发团队推出的一个新的 SDK，集成了[腾讯云实时音视频 TRTC](https://cloud.tencent.com/product/trtc/)、[腾讯云即时通信 TIM](https://cloud.tencent.com/product/im)、[腾讯云超级播放器 TCPlayer](https://cloud.tencent.com/document/product/454/7503)，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 [API](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)，接入后可快速实现 Web 端推流、拉流以及实时聊天互动功能。
+[TWebLive](https://www.npmjs.com/package/tweblive)，腾讯云 Web 直播互动组件，是腾讯云终端研发团队推出的一个新的 SDK，集成了[腾讯云实时音视频 TRTC](https://cloud.tencent.com/product/trtc/)、[腾讯云即时通信 TIM](https://cloud.tencent.com/product/im)、[腾讯云超级播放器 TCPlayer](https://cloud.tencent.com/document/product/454/7503)，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 [API](https://web.sdk.qcloud.com/component/tweblive/doc/zh-cn/TWebLive.html)，接入后可快速实现 Web 端推流、拉流以及实时聊天互动功能。
 
 ## 效果展示
 
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/demo.gif)
+![](https://web.sdk.qcloud.com/component/tweblive/assets/doc/demo.gif)
 
 ## 架构设计
 
-![](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblivedemo/doc-assets/demo-framework.png)
+![](https://web.sdk.qcloud.com/component/tweblive/assets/doc/demo-framework.png)
 
 ## TWebLive 的优点
 开发者接入此 SDK，可**彻底替代 flash 推流方案**，**大大降低** Web 推流、Web 低延时观看、CDN 观看以及实时聊天互动（或弹幕）的**实现复杂度和时间成本**，举例说明：
@@ -151,14 +151,6 @@ Web 推流和 Web 低延时观看用到了 WebRTC 技术。目前主要在桌面
 - 本地计算 UserSig 的方式仅用于本地开发调试，请勿直接发布到线上，一旦您的 `SECRETKEY` 泄露，攻击者就可以盗用您的腾讯云流量。正确的 UserSig 签发方式是将 UserSig 的计算代码集成到您的服务端，并提供面向 App 的接口，在需要 UserSig 时由您的 App 向业务服务器发起请求获取动态 UserSig。更多详情请参见 [服务端生成 UserSig](https://cloud.tencent.com/document/product/269/32688#GeneratingdynamicUserSig)。
 - 由于 H.264 版权限制，华为系统的 Chrome 浏览器和以 Chrome WebView 为内核的浏览器均不支持 TRTC 桌面浏览器端 SDK 的正常运行。
 
-## 后续计划
-
-- 推流端支持屏幕分享
-- 图片消息互动
-- 观众端多线路观看（WebRTC 低延时线路和 CDN 线路）
-- 主播观众连麦互动
-- And More...
-
 ## 参考文档
 
-- [TWebLive 接口手册](https://webim-1252463788.cos.ap-shanghai.myqcloud.com/tweblive/TWebLive.html)
+- [TWebLive 接口手册](https://web.sdk.qcloud.com/component/tweblive/doc/zh-cn/TWebLive.html)
