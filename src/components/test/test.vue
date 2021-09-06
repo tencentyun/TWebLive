@@ -939,7 +939,7 @@
             }
           })
           await this.client.join({
-            roomId: options.roomId,
+            roomId: parseInt(options.roomId),
           })
           this.localStream = TRTC.createStream({
             audio: true,
