@@ -1,3 +1,23 @@
+## 注意
+
+此项目已经**废弃**，以后不再维护。我们推出新的视频直播互动组件 [TUIPusher&TUIPlayer](https://cloud.tencent.com/document/product/647/63830)
+
+体验地址：
+
+- [TUIPusher 体验链接](https://web.sdk.qcloud.com/component/tuiliveroom/tuipusher/login.html)
+- [TUIPlayer 体验链接](https://web.sdk.qcloud.com/component/tuiliveroom/tuiplayer/login.html)
+
+为方便您的使用，本组件配套多篇使用指引：
+
+- 如果您想要了解更多关于 TUIPusher & TUIPlayer，请阅读官网文档 [TUIPusher&TUIPlayer](https://cloud.tencent.com/document/product/647/63830)
+
+- 如果您想把我们的功能直接集成到您的项目中，请阅读 [TUIPusher&TUIPlayer](https://cloud.tencent.com/document/product/647/63830)
+
+
+- 欢迎加入 QQ 群：**592465424**，进行技术交流和反馈~
+
+<details>
+<summary>以下为原 README 内容</summary>
 ## 简介
 [TWebLive](https://www.npmjs.com/package/tweblive)，腾讯云 Web 直播互动组件，是腾讯云终端研发团队推出的一个新的 SDK，集成了[腾讯云实时音视频 TRTC](https://cloud.tencent.com/product/trtc/)、[腾讯云即时通信 TIM](https://cloud.tencent.com/product/im)、[腾讯云超级播放器 TCPlayer](https://cloud.tencent.com/document/product/454/7503)，覆盖了 Web 直播互动场景常见的功能（推流、开/关麦，开/关摄像头，微信分享观看、聊天点赞等等），并封装了简单易用的 [API](https://web.sdk.qcloud.com/component/tweblive/doc/zh-cn/TWebLive.html)，接入后可快速实现 Web 端推流、拉流以及实时聊天互动功能。
 
